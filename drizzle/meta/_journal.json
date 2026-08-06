@@ -8,6 +8,41 @@
       "when": 1786028453396,
       "tag": "0000_ancient_joystick",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1786033085681,
+      "tag": "0001_faithful_rictor",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786033514646,
+      "tag": "0002_thin_stone_men",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1786033685721,
+      "tag": "0003_simple_golden_guardian",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1786033967806,
+      "tag": "0004_wide_archangel",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1786035020265,
+      "tag": "0005_freezing_black_widow",
+      "breakpoints": true
     }
   ]
 }

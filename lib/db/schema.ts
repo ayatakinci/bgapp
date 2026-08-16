@@ -1,4 +1,4 @@
-import { pgTable, serial, text, timestamp, integer, primaryKey, index, real } from "drizzle-orm/pg-core";
+import { pgTable, serial, text, timestamp, integer, primaryKey, index, real, boolean } from "drizzle-orm/pg-core";
 
 
 export const words = pgTable("words", {
@@ -75,4 +75,23 @@ export const reviews = pgTable(
     lastReviewedAt: timestamp("last_reviewed_at"),
   },
   (table) => [primaryKey({ columns: [table.userId, table.wordId] })]
+);
+
+// Append-only history of every answer ever submitted -- unlike `reviews`
+// (current state, overwritten each time), this is what stats/streaks/
+// accuracy actually need to compute from.
+export const reviewLog = pgTable(
+  "review_log",
+  {
+    id: serial("id").primaryKey(),
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    wordId: integer("word_id")
+      .notNull()
+      .references(() => words.id, { onDelete: "cascade" }),
+    correct: boolean("correct").notNull(),
+    answeredAt: timestamp("answered_at").notNull().defaultNow(),
+  },
+  (table) => [index("review_log_user_id_idx").on(table.userId)]
 );

@@ -1,6 +1,6 @@
 import { eq, and, lte, notExists } from "drizzle-orm";
 import { db } from "./index";
-import { reviews, words } from "./schema";
+import { reviews, words, reviewLog } from "./schema";
 import { nextReviewState } from "../srs";
 
 // Words this user has never reviewed before -- the pool "new word" lessons
@@ -76,6 +76,10 @@ export async function recordAnswer(userId: number, wordId: number, correct: bool
         lastReviewedAt: new Date(),
       },
     });
+
+  // reviews holds current state (overwritten above); this is the
+  // permanent record of the event itself, for stats/streaks later.
+  await db.insert(reviewLog).values({ userId, wordId, correct });
 
   return result;
 }

@@ -47,6 +47,9 @@ export default async function RootLayout({
             <Link href="/review" className="text-sm text-stone-600 hover:text-stone-900">
               Review
             </Link>
+            <Link href="/progress" className="text-sm text-stone-600 hover:text-stone-900">
+              Progress
+            </Link>
 
             <div className="ml-auto flex items-center gap-4">
               {user ? (

@@ -9,23 +9,37 @@ type Props = {
   onAnswer: (correct: boolean) => void;
 };
 
-function shuffle<T>(items: T[]): T[] {
-  const result = [...items];
-  for (let i = result.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [result[i], result[j]] = [result[j], result[i]];
+// A Client Component's first render happens on the SERVER (to produce
+// fast initial HTML), then again in the browser during hydration -- both
+// runs must produce identical output, or React throws a hydration
+// mismatch. Math.random() breaks that: it gives a different order each
+// time it's called, so the server's shuffle and the client's shuffle
+// disagreed. This hashes the word itself as a seed instead, so the
+// "shuffle" is really a deterministic sort -- same word, same order,
+// every time, on both server and client.
+function hashString(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
   }
-  return result;
+  return hash;
+}
+
+function seededShuffle<T extends string>(items: T[], seed: string): T[] {
+  return [...items].sort((a, b) => hashString(seed + a) - hashString(seed + b));
 }
 
 export function ChoiceGame({ bg, en, distractors, onAnswer }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
 
   const options = useMemo(() => {
-    const wrongOptions = shuffle(distractors.filter((d) => d !== en)).slice(0, 3);
-    return shuffle([en, ...wrongOptions]);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [bg, en]);
+    const wrongOptions = seededShuffle(
+      distractors.filter((d) => d !== en),
+      bg
+    ).slice(0, 3);
+    return seededShuffle([en, ...wrongOptions], bg + "x");
+  }, [bg, en, distractors]);
 
   function handleSelect(option: string) {
     if (selected) return;

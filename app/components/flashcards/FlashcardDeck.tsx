@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { Flashcard } from "./Flashcard";
 import { ChoiceGame } from "../exercises/ChoiceGame";
+import { TypingExercise } from "../exercises/TypingExercise";
 import { submitAnswer } from "@/lib/actions";
 
 type Word = { id: number; bg: string; en: string };
@@ -13,13 +14,29 @@ type Props = {
   distractorPool: string[];
 };
 
+const EXERCISE_TYPES = ["flashcard", "choice", "typing"] as const;
+
+// Same hydration-mismatch fix as ChoiceGame's shuffle: this used to call
+// Math.random() during render, which a Client Component runs once on the
+// server (for the initial HTML) and once again in the browser during
+// hydration -- two different random picks for the same word means two
+// different components rendered at the same position, which React flags
+// as a mismatch. Deriving the pick from the word's own stable id instead
+// makes both passes agree.
+function hashString(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
 export function FlashcardDeck({ words, userId, distractorPool }: Props) {
   const [index, setIndex] = useState(0);
 
-  // Decide each card's exercise type once, up front -- not on every
-  // render, or it would reshuffle every time this component re-renders.
   const exerciseTypes = useMemo(
-    () => words.map(() => (Math.random() < 0.5 ? "flashcard" : "choice")),
+    () => words.map((w) => EXERCISE_TYPES[hashString(String(w.id)) % EXERCISE_TYPES.length]),
     [words]
   );
 
@@ -44,9 +61,10 @@ export function FlashcardDeck({ words, userId, distractorPool }: Props) {
       <p className="text-sm text-stone-400">
         {index + 1} / {words.length}
       </p>
-      {type === "flashcard" ? (
+      {type === "flashcard" && (
         <Flashcard key={current.id} bg={current.bg} en={current.en} onAnswer={handleAnswer} />
-      ) : (
+      )}
+      {type === "choice" && (
         <ChoiceGame
           key={current.id}
           bg={current.bg}
@@ -54,6 +72,9 @@ export function FlashcardDeck({ words, userId, distractorPool }: Props) {
           distractors={distractorPool}
           onAnswer={handleAnswer}
         />
+      )}
+      {type === "typing" && (
+        <TypingExercise key={current.id} bg={current.bg} en={current.en} onAnswer={handleAnswer} />
       )}
     </div>
   );

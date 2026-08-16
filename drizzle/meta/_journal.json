@@ -43,6 +43,13 @@
       "when": 1786035020265,
       "tag": "0005_freezing_black_widow",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1786898577464,
+      "tag": "0006_strange_skin",
+      "breakpoints": true
     }
   ]
 }

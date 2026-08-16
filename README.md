@@ -1,36 +1,130 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# bgapp
 
-## Getting Started
+A small, open Bulgarian vocabulary trainer — flashcards and spaced repetition,
+built as a learning project to go deep on the full stack behind it (Next.js,
+TypeScript, Postgres, Drizzle) rather than to ship as fast as possible.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router) — full-stack: pages, API layer, and Server
+  Actions all live in the same app
+- **TypeScript**
+- **Tailwind CSS v4**
+- **Postgres 17**, running in Docker locally
+- **Drizzle ORM** + `drizzle-kit` for schema, migrations, and queries
+- **postgres.js** as the underlying database driver
+
+## Features
+
+- 500 real Bulgarian words, imported from open data (see **Data sources**
+  below) — not scraped from any commercial app
+- Lessons and a lesson picker, grouping words for structured browsing
+- A spaced-repetition review queue (a simplified SM-2 algorithm, the same
+  family of algorithm behind Anki) that schedules words based on whether you
+  got them right or wrong
+- Flashcard review flow, backed by a Server Action that persists each answer
+
+## Getting started
+
+### Prerequisites
+
+- Node.js
+- Docker Desktop
+
+### Setup
+
+```bash
+npm install
+```
+
+Create a `.env` file in the project root:
+
+```
+DATABASE_URL=postgres://bgapp:bgapp@localhost:5432/bgapp
+```
+
+Start Postgres:
+
+```bash
+docker compose up -d
+```
+
+Run migrations:
+
+```bash
+npx drizzle-kit migrate
+```
+
+Start the dev server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Populating data
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The database starts empty. These one-off scripts populate it (each is a
+plain TypeScript file, run with `tsx`, not a long-running server):
 
-## Learn More
+```bash
+# Import ~500 real Bulgarian words from open data sources
+npx tsx lib/db/ingest.mts
 
-To learn more about Next.js, take a look at the following resources:
+# Group the imported words into lessons
+npx tsx lib/db/seed-lessons.mts
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+app/                      routes (pages, layouts, Server Actions boundary)
+  lessons/                lesson list + lesson detail pages
+  review/                 the flashcard review flow
+  words/                  full word list
+  components/flashcards/  Flashcard, FlashcardDeck (client components)
+lib/
+  db/
+    schema.ts             Drizzle schema — all tables
+    index.ts              the Drizzle client used at runtime
+    reviews.ts            due/new word queries, answer recording
+    ingest.mts            imports real vocabulary from open data
+    seed-lessons.mts      groups imported words into lessons
+  srs.ts                  the spaced-repetition algorithm (pure function)
+  actions.ts              Server Actions (e.g. submitAnswer)
+drizzle/                  generated SQL migrations + schema snapshots
+docker-compose.yml        local Postgres
+```
 
-## Deploy on Vercel
+## Data sources
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Vocabulary is built from open-licensed sources only, not scraped from any
+paid app:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- **[FrequencyWords](https://github.com/hermitdave/FrequencyWords)** by
+  Hermit Dave (MIT) — used to prioritize which words are worth teaching
+  first, based on real-world usage frequency
+- **[Wiktionary](https://www.wiktionary.org/) via [kaikki.org](https://kaikki.org)**
+  (CC BY-SA) — used for English definitions and part-of-speech
+
+### Known data quality limitations
+
+- The import takes the first Wiktionary sense/gloss found per word, which is
+  sometimes a rare or technical meaning rather than the common one
+- The frequency list is sourced from subtitle data, so a handful of
+  slang/vulgar words are mixed in among genuinely common vocabulary
+
+Neither is fixed yet — see the code comments in `lib/db/ingest.mts` for
+where this would need to change (a curated blocklist, better sense
+selection) before this is used by anyone beyond development/testing.
+
+## Status
+
+Currently working: schema, real vocabulary import, spaced repetition
+scheduling, flashcard review, lesson browsing, and real user
+accounts (signup/login/logout, hashed passwords, database-backed
+sessions, protected routes via `proxy.ts`).
+
+Not yet built: additional exercise types beyond flip-card review,
+email verification/password reset, deployment.

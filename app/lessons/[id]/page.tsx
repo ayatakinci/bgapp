@@ -13,7 +13,7 @@ export default async function LessonPage({
   const [lesson] = await db.select().from(lessons).where(eq(lessons.id, lessonId));
 
   if (!lesson) {
-    return <p>Lesson not found.</p>;
+    return <p className="text-stone-500">Lesson not found.</p>;
   }
 
   const lessonWordsList = await db
@@ -24,11 +24,12 @@ export default async function LessonPage({
 
   return (
     <div>
-      <h1>{lesson.title}</h1>
-      <ul>
+      <h1 className="mb-6 text-2xl font-semibold tracking-tight">{lesson.title}</h1>
+      <ul className="divide-y divide-stone-200 rounded-md border border-stone-200 bg-white">
         {lessonWordsList.map((word) => (
-          <li key={word.id}>
-            {word.bg} — {word.en}
+          <li key={word.id} className="flex items-baseline justify-between px-4 py-3">
+            <span className="font-medium">{word.bg}</span>
+            <span className="text-sm text-stone-500">{word.en}</span>
           </li>
         ))}
       </ul>

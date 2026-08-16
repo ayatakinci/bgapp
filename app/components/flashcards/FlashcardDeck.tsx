@@ -15,11 +15,11 @@ export function FlashcardDeck({ words, userId }: Props) {
   const [index, setIndex] = useState(0);
 
   if (words.length === 0) {
-    return <p>No words to review right now.</p>;
+    return <p className="text-stone-500">No words to review right now.</p>;
   }
 
   if (index >= words.length) {
-    return <p>Session complete!</p>;
+    return <p className="text-lg font-medium text-stone-700">Session complete! 🎉</p>;
   }
 
   const current = words[index];
@@ -30,6 +30,11 @@ export function FlashcardDeck({ words, userId }: Props) {
   }
 
   return (
-    <Flashcard key={current.id} bg={current.bg} en={current.en} onAnswer={handleAnswer} />
+    <div className="flex flex-col items-center gap-4">
+      <p className="text-sm text-stone-400">
+        {index + 1} / {words.length}
+      </p>
+      <Flashcard key={current.id} bg={current.bg} en={current.en} onAnswer={handleAnswer} />
+    </div>
   );
 }

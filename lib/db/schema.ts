@@ -95,3 +95,33 @@ export const reviewLog = pgTable(
   },
   (table) => [index("review_log_user_id_idx").on(table.userId)]
 );
+
+// A separate content model from lessons/words on purpose -- grammar
+// topics (Part A of the roadmap) are a different kind of thing than
+// vocabulary words, and drills here are practiced on demand rather than
+// scheduled through the SRS system (that would need reviews/review_log
+// to become polymorphic across words and drills, a bigger change than
+// this pass -- deliberately left for later).
+export const grammarTopics = pgTable("grammar_topics", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  position: integer("position").notNull().unique(),
+});
+
+export const grammarDrills = pgTable(
+  "grammar_drills",
+  {
+    id: serial("id").primaryKey(),
+    topicId: integer("topic_id")
+      .notNull()
+      .references(() => grammarTopics.id, { onDelete: "cascade" }),
+    // promptBg contains a literal "___" marking where the blank goes,
+    // e.g. "___ книга е голяма." with correctAnswer "Тази".
+    promptBg: text("prompt_bg").notNull(),
+    promptEn: text("prompt_en").notNull(),
+    correctAnswer: text("correct_answer").notNull(),
+    options: text("options").array().notNull(),
+  },
+  (table) => [index("grammar_drills_topic_id_idx").on(table.topicId)]
+);

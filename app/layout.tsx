@@ -41,6 +41,9 @@ export default async function RootLayout({
             <Link href="/lessons" className="text-sm text-stone-600 hover:text-stone-900">
               Lessons
             </Link>
+            <Link href="/grammar" className="text-sm text-stone-600 hover:text-stone-900">
+              Grammar
+            </Link>
             <Link href="/words" className="text-sm text-stone-600 hover:text-stone-900">
               All words
             </Link>

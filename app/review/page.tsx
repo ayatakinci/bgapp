@@ -1,4 +1,7 @@
 import { redirect } from "next/navigation";
+import { sql } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { words } from "@/lib/db/schema";
 import { getDueReviews, getNewWords } from "@/lib/db/reviews";
 import { getSession } from "@/lib/auth/dal";
 import { FlashcardDeck } from "@/app/components/flashcards/FlashcardDeck";
@@ -23,10 +26,19 @@ export default async function ReviewPage() {
     ...newWords.map((w) => ({ id: w.id, bg: w.bg, en: w.en })),
   ].slice(0, 20);
 
+  // A random sample of translations from the whole word pool, used as
+  // wrong-answer options for the multiple-choice exercise.
+  const distractorRows = await db
+    .select({ en: words.en })
+    .from(words)
+    .orderBy(sql`random()`)
+    .limit(50);
+  const distractorPool = distractorRows.map((w) => w.en);
+
   return (
     <div>
       <h1 className="mb-8 text-2xl font-semibold tracking-tight">Review</h1>
-      <FlashcardDeck words={queue} userId={userId} />
+      <FlashcardDeck words={queue} userId={userId} distractorPool={distractorPool} />
     </div>
   );
 }

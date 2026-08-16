@@ -116,6 +116,49 @@ export async function findWords(
   return Array.from(found.values());
 }
 
+// Like findWords, but driven by an explicit target list instead of the
+// frequency list -- for pulling specific named words (e.g. the roadmap's
+// domain vocabulary) rather than "whatever's most common." Scans the
+// whole file rather than stopping early, since the targets are scattered
+// throughout it, not concentrated near the start.
+export async function findSpecificWords(targetWords: Set<string>): Promise<ImportedWord[]> {
+  const found = new Map<string, ImportedWord>();
+
+  const res = await fetch(WIKTIONARY_URL);
+  if (!res.body) throw new Error("No response body from Wiktionary source");
+
+  const nodeStream = Readable.fromWeb(res.body as any);
+  const rl = readline.createInterface({ input: nodeStream, crlfDelay: Infinity });
+
+  for await (const line of rl) {
+    if (found.size >= targetWords.size) break;
+    if (!line.trim()) continue;
+
+    let entry: WiktionaryEntry;
+    try {
+      entry = JSON.parse(line);
+    } catch {
+      continue;
+    }
+
+    if (entry.lang !== "Bulgarian" || !entry.word) continue;
+    if (entry.pos === "character") continue;
+
+    const plain = stripStress(entry.word);
+    if (found.has(plain) || !targetWords.has(plain)) continue;
+
+    const gloss = pickBestGloss(entry);
+    if (!gloss) continue;
+
+    found.set(plain, { bg: plain, en: gloss, partOfSpeech: entry.pos ?? "unknown" });
+  }
+
+  rl.close();
+  nodeStream.destroy();
+
+  return Array.from(found.values());
+}
+
 async function main() {
   console.log(`Looking for ${TARGET_COUNT} words...`);
   const rows = await findWords(TARGET_COUNT);

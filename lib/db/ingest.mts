@@ -10,12 +10,25 @@ const FREQUENCY_LIST_URL =
 const WIKTIONARY_URL =
   "https://kaikki.org/dictionary/Bulgarian/kaikki.org-dictionary-Bulgarian.jsonl";
 
+// Wiktionary usage labels that mark a sense as a poor fit for a beginner
+// word list -- either inappropriate (vulgar/slang/offensive/derogatory) or
+// unlikely to be genuinely useful (obsolete/archaic/rare).
+const SKIP_SENSE_TAGS = new Set([
+  "vulgar",
+  "slang",
+  "offensive",
+  "derogatory",
+  "obsolete",
+  "archaic",
+  "rare",
+]);
+
 // Bulgarian Wiktionary marks stress with a combining acute accent (U+0301)
 // on the stressed vowel, e.g. "у́каз". The frequency list has plain surface
 // forms with no stress marks, so we strip combining diacritics to compare
 // them on equal footing.
 function stripStress(word: string): string {
-  return word.normalize("NFC").replace(/[\u0300-\u036f]/g, "");
+  return word.normalize("NFC").replace(/[̀-ͯ]/g, "");
 }
 
 async function loadCandidateWords(): Promise<string[]> {
@@ -31,17 +44,38 @@ type WiktionaryEntry = {
   word: string;
   pos?: string;
   lang?: string;
-  senses?: { glosses?: string[] }[];
+  senses?: { glosses?: string[]; tags?: string[] }[];
 };
 
-async function main() {
-  console.log("Loading frequency list...");
+// Walks a word's senses in order and returns the first gloss that isn't
+// tagged as inappropriate/obsolete/etc, instead of blindly trusting
+// whichever sense happens to be listed first.
+function pickBestGloss(entry: WiktionaryEntry): string | undefined {
+  for (const sense of entry.senses ?? []) {
+    const tags = sense.tags ?? [];
+    const isSkippable = tags.some((tag) => SKIP_SENSE_TAGS.has(tag));
+    if (isSkippable) continue;
+
+    const gloss = sense.glosses?.[0];
+    if (gloss) return gloss;
+  }
+  return undefined;
+}
+
+export type ImportedWord = { bg: string; en: string; partOfSpeech: string };
+
+// Streams the Wiktionary extract looking for matches against a candidate
+// word list, stopping once `targetCount` matches are found. `excludeWords`
+// lets a caller top up an existing set without re-matching words it
+// already has.
+export async function findWords(
+  targetCount: number,
+  excludeWords: Set<string> = new Set()
+): Promise<ImportedWord[]> {
   const candidates = await loadCandidateWords();
-  const remaining = new Set(candidates);
+  const remaining = new Set(candidates.filter((w) => !excludeWords.has(w)));
 
-  console.log(`Looking for ${TARGET_COUNT} matches among ${remaining.size} candidate words...`);
-
-  const found = new Map<string, { bg: string; en: string; partOfSpeech: string }>();
+  const found = new Map<string, ImportedWord>();
 
   const res = await fetch(WIKTIONARY_URL);
   if (!res.body) throw new Error("No response body from Wiktionary source");
@@ -50,7 +84,7 @@ async function main() {
   const rl = readline.createInterface({ input: nodeStream, crlfDelay: Infinity });
 
   for await (const line of rl) {
-    if (found.size >= TARGET_COUNT) break;
+    if (found.size >= targetCount) break;
     if (!line.trim()) continue;
 
     let entry: WiktionaryEntry;
@@ -61,11 +95,12 @@ async function main() {
     }
 
     if (entry.lang !== "Bulgarian" || !entry.word) continue;
+    if (entry.pos === "character") continue; // alphabet-letter entries, not vocabulary
 
     const plain = stripStress(entry.word);
-    if (found.has(plain) || !remaining.has(plain)) continue;
+    if (found.has(plain) || excludeWords.has(plain) || !remaining.has(plain)) continue;
 
-    const gloss = entry.senses?.[0]?.glosses?.[0];
+    const gloss = pickBestGloss(entry);
     if (!gloss) continue;
 
     found.set(plain, {
@@ -78,14 +113,20 @@ async function main() {
   rl.close();
   nodeStream.destroy();
 
-  console.log(`Matched ${found.size} words. Inserting into the database...`);
+  return Array.from(found.values());
+}
 
-  const rows = Array.from(found.values());
+async function main() {
+  console.log(`Looking for ${TARGET_COUNT} words...`);
+  const rows = await findWords(TARGET_COUNT);
+
+  console.log(`Matched ${rows.length} words. Inserting into the database...`);
   if (rows.length > 0) {
     await db.insert(words).values(rows);
   }
-
   console.log(`Done. Inserted ${rows.length} words.`);
 }
 
-main().then(() => process.exit(0));
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main().then(() => process.exit(0));
+}

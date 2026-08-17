@@ -1,7 +1,18 @@
-import { eq, and, lte, notExists } from "drizzle-orm";
+import { eq, and, lte, notExists, inArray } from "drizzle-orm";
 import { db } from "./index";
 import { reviews, words, reviewLog } from "./schema";
 import { nextReviewState } from "../srs";
+
+// How many of the given words this user has reviewed at least once --
+// "started", not "mastered". Used for a lesson's "Completed: X / Y" badge.
+export async function countStartedWords(userId: number, wordIds: number[]) {
+  if (wordIds.length === 0) return 0;
+  const rows = await db
+    .select({ wordId: reviews.wordId })
+    .from(reviews)
+    .where(and(eq(reviews.userId, userId), inArray(reviews.wordId, wordIds)));
+  return rows.length;
+}
 
 // Words this user has never reviewed before -- the pool "new word" lessons
 // pull from, as opposed to the spaced-repetition queue below.

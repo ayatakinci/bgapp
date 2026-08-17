@@ -4,6 +4,8 @@ import { lessons, lessonWords, words, sentences } from "@/lib/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { getLessonSentences } from "@/lib/db/lesson-sentences";
 import { SpeakButton } from "@/app/components/SpeakButton";
+import { getSession } from "@/lib/auth/dal";
+import { countStartedWords } from "@/lib/db/reviews";
 
 export const dynamic = "force-dynamic";
 
@@ -45,9 +47,14 @@ export default async function LessonPage({
   // words, separate from the one-per-word example above the vocab list.
   const readingSentences = await getLessonSentences(lessonId, 100);
 
+  const session = await getSession();
+  const startedCount = session
+    ? await countStartedWords(session.userId, wordIds)
+    : null;
+
   return (
     <div>
-      <div className="mb-6 flex items-baseline justify-between">
+      <div className="mb-2 flex items-baseline justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">{lesson.title}</h1>
         <Link
           href={`/lessons/${lessonId}/practice`}
@@ -56,6 +63,20 @@ export default async function LessonPage({
           Practice sentences
         </Link>
       </div>
+      <p className="mb-6 text-sm text-stone-500">
+        {startedCount !== null ? (
+          <>
+            Completed: {startedCount} / {lessonWordsList.length} words
+          </>
+        ) : (
+          <>
+            <Link href="/login" className="underline hover:text-stone-700">
+              Log in
+            </Link>{" "}
+            to track your progress in this lesson
+          </>
+        )}
+      </p>
 
       <h2 className="mb-3 text-sm font-medium uppercase tracking-wide text-stone-500">
         Words ({lessonWordsList.length})

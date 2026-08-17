@@ -3,6 +3,9 @@ import { eq, asc, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { words, sentences } from "@/lib/db/schema";
 import { SpeakButton } from "@/app/components/SpeakButton";
+import { getSession } from "@/lib/auth/dal";
+import { isInWordBank } from "@/lib/db/word-bank";
+import { toggleWordBank } from "@/lib/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -29,14 +32,36 @@ export default async function WordDetailPage({
     .orderBy(asc(sql`length(${sentences.bg})`))
     .limit(5);
 
+  const session = await getSession();
+  const inBank = session ? await isInWordBank(session.userId, wordId) : false;
+  const toggleAction = session
+    ? toggleWordBank.bind(null, session.userId, wordId, inBank, `/words/${wordId}`)
+    : null;
+
   return (
     <div>
       <Link href="/words" className="mb-4 inline-block text-sm text-stone-500 hover:text-stone-800">
         ← All words
       </Link>
-      <div className="flex items-center gap-2">
-        <h1 className="text-3xl font-semibold tracking-tight">{word.bg}</h1>
-        <SpeakButton text={word.bg} />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <h1 className="text-3xl font-semibold tracking-tight">{word.bg}</h1>
+          <SpeakButton text={word.bg} />
+        </div>
+        {toggleAction && (
+          <form action={toggleAction}>
+            <button
+              type="submit"
+              className={`rounded-md border px-3 py-1.5 text-sm font-medium ${
+                inBank
+                  ? "border-stone-300 text-stone-600 hover:bg-stone-100"
+                  : "border-stone-900 bg-stone-900 text-white hover:bg-stone-700"
+              }`}
+            >
+              {inBank ? "− Remove from word bank" : "+ Add to word bank"}
+            </button>
+          </form>
+        )}
       </div>
       <p className="mt-1 text-lg text-stone-600">{word.en}</p>
       {word.partOfSpeech && (

@@ -50,6 +50,9 @@ export default async function RootLayout({
             <Link href="/review" className="text-sm text-stone-600 hover:text-stone-900">
               Review
             </Link>
+            <Link href="/word-bank" className="text-sm text-stone-600 hover:text-stone-900">
+              Word bank
+            </Link>
             <Link href="/progress" className="text-sm text-stone-600 hover:text-stone-900">
               Progress
             </Link>

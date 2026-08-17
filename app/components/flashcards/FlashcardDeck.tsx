@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Flashcard } from "./Flashcard";
 import { ChoiceGame } from "../exercises/ChoiceGame";
 import { TypingExercise } from "../exercises/TypingExercise";
+import { ListeningExercise } from "../exercises/ListeningExercise";
 import { submitAnswer } from "@/lib/actions";
 
 type Word = { id: number; bg: string; en: string };
@@ -14,7 +15,7 @@ type Props = {
   distractorPool: string[];
 };
 
-const EXERCISE_TYPES = ["flashcard", "choice", "typing"] as const;
+const EXERCISE_TYPES = ["flashcard", "choice", "typing", "listening"] as const;
 
 // Same hydration-mismatch fix as ChoiceGame's shuffle: this used to call
 // Math.random() during render, which a Client Component runs once on the
@@ -75,6 +76,15 @@ export function FlashcardDeck({ words, userId, distractorPool }: Props) {
       )}
       {type === "typing" && (
         <TypingExercise key={current.id} bg={current.bg} en={current.en} onAnswer={handleAnswer} />
+      )}
+      {type === "listening" && (
+        <ListeningExercise
+          key={current.id}
+          bg={current.bg}
+          en={current.en}
+          distractors={distractorPool}
+          onAnswer={handleAnswer}
+        />
       )}
     </div>
   );

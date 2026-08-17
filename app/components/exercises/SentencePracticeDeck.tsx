@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import { Flashcard } from "../flashcards/Flashcard";
 import { ChoiceGame } from "./ChoiceGame";
 import { SentenceFillBlank } from "./SentenceFillBlank";
+import { ListeningExercise } from "./ListeningExercise";
 
 type Sentence = { id: number; bg: string; en: string; matchedWord: string };
 
@@ -12,7 +13,7 @@ type Props = {
   wordDistractorPool: string[]; // words.bg values, for fill-blank options
 };
 
-const EXERCISE_TYPES = ["flashcard", "choice", "fillBlank"] as const;
+const EXERCISE_TYPES = ["flashcard", "choice", "fillBlank", "listening"] as const;
 
 // Same hydration-mismatch-avoidance pattern as FlashcardDeck: derive the
 // exercise-type pick from something stable (the sentence's own id)
@@ -82,6 +83,15 @@ export function SentencePracticeDeck({ sentences, wordDistractorPool }: Props) {
           en={current.en}
           matchedWord={current.matchedWord}
           distractors={wordDistractorPool}
+          onAnswer={handleAnswer}
+        />
+      )}
+      {type === "listening" && (
+        <ListeningExercise
+          key={current.id}
+          bg={current.bg}
+          en={current.en}
+          distractors={sentenceTranslations}
           onAnswer={handleAnswer}
         />
       )}

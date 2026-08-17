@@ -112,6 +112,9 @@ export const grammarTopics = pgTable("grammar_topics", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description"),
+  // Longer-form prose: etymology, formality notes, cultural context --
+  // the "why", not just the one-line "what" in description.
+  notes: text("notes"),
   level: text("level").notNull().default("A1"), // "A1" | "A2" | "B1" | "B2"
   position: integer("position").notNull().unique(),
 });
@@ -131,4 +134,21 @@ export const grammarDrills = pgTable(
     options: text("options").array().notNull(),
   },
   (table) => [index("grammar_drills_topic_id_idx").on(table.topicId)]
+);
+
+// A user's own hand-picked words, separate from the SRS review queue --
+// e.g. words they want to drill before a trip, independent of whatever
+// the spaced-repetition schedule would otherwise serve up.
+export const wordBank = pgTable(
+  "word_bank",
+  {
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    wordId: integer("word_id")
+      .notNull()
+      .references(() => words.id, { onDelete: "cascade" }),
+    addedAt: timestamp("added_at").notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.wordId] })]
 );

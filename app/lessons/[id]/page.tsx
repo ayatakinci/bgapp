@@ -1,6 +1,8 @@
 import { db } from "@/lib/db";
-import { lessons, lessonWords, words } from "@/lib/db/schema";
-import { eq } from "drizzle-orm";
+import { lessons, lessonWords, words, sentences } from "@/lib/db/schema";
+import { eq, inArray } from "drizzle-orm";
+
+export const dynamic = "force-dynamic";
 
 export default async function LessonPage({
   params,
@@ -22,16 +24,40 @@ export default async function LessonPage({
     .innerJoin(words, eq(lessonWords.wordId, words.id))
     .where(eq(lessonWords.lessonId, lessonId));
 
+  const wordIds = lessonWordsList.map((w) => w.id);
+  const sentenceRows =
+    wordIds.length > 0
+      ? await db
+          .select({ wordId: sentences.wordId, bg: sentences.bg, en: sentences.en })
+          .from(sentences)
+          .where(inArray(sentences.wordId, wordIds))
+      : [];
+
+  const sentencesByWord = new Map<number, { bg: string; en: string }>();
+  for (const s of sentenceRows) {
+    if (!sentencesByWord.has(s.wordId)) sentencesByWord.set(s.wordId, s); // one example is enough here
+  }
+
   return (
     <div>
       <h1 className="mb-6 text-2xl font-semibold tracking-tight">{lesson.title}</h1>
       <ul className="divide-y divide-stone-200 rounded-md border border-stone-200 bg-white">
-        {lessonWordsList.map((word) => (
-          <li key={word.id} className="flex items-baseline justify-between px-4 py-3">
-            <span className="font-medium">{word.bg}</span>
-            <span className="text-sm text-stone-500">{word.en}</span>
-          </li>
-        ))}
+        {lessonWordsList.map((word) => {
+          const example = sentencesByWord.get(word.id);
+          return (
+            <li key={word.id} className="px-4 py-3">
+              <div className="flex items-baseline justify-between">
+                <span className="font-medium">{word.bg}</span>
+                <span className="text-sm text-stone-500">{word.en}</span>
+              </div>
+              {example && (
+                <p className="mt-1 text-sm text-stone-400">
+                  {example.bg} <span className="italic">— {example.en}</span>
+                </p>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );

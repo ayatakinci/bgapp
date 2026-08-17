@@ -2,6 +2,7 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { lessons, lessonWords, words, sentences } from "@/lib/db/schema";
 import { eq, inArray } from "drizzle-orm";
+import { getLessonSentences } from "@/lib/db/lesson-sentences";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +40,10 @@ export default async function LessonPage({
     if (!sentencesByWord.has(s.wordId)) sentencesByWord.set(s.wordId, s); // one example is enough here
   }
 
+  // The full reading pool -- up to 100 real sentences across this lesson's
+  // words, separate from the one-per-word example above the vocab list.
+  const readingSentences = await getLessonSentences(lessonId, 100);
+
   return (
     <div>
       <div className="mb-6 flex items-baseline justify-between">
@@ -50,7 +55,11 @@ export default async function LessonPage({
           Practice sentences
         </Link>
       </div>
-      <ul className="divide-y divide-stone-200 rounded-md border border-stone-200 bg-white">
+
+      <h2 className="mb-3 text-sm font-medium uppercase tracking-wide text-stone-500">
+        Words ({lessonWordsList.length})
+      </h2>
+      <ul className="mb-10 divide-y divide-stone-200 rounded-md border border-stone-200 bg-white">
         {lessonWordsList.map((word) => {
           const example = sentencesByWord.get(word.id);
           return (
@@ -68,6 +77,22 @@ export default async function LessonPage({
           );
         })}
       </ul>
+
+      <h2 className="mb-3 text-sm font-medium uppercase tracking-wide text-stone-500">
+        Example sentences ({readingSentences.length})
+      </h2>
+      {readingSentences.length === 0 ? (
+        <p className="text-sm text-stone-400">No example sentences for this lesson yet.</p>
+      ) : (
+        <ul className="divide-y divide-stone-200 rounded-md border border-stone-200 bg-white">
+          {readingSentences.map((s) => (
+            <li key={s.id} className="px-4 py-3">
+              <p className="font-medium">{s.bg}</p>
+              <p className="mt-1 text-sm text-stone-500">{s.en}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

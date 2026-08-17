@@ -2,6 +2,7 @@ import Link from "next/link";
 import { eq, asc, sql } from "drizzle-orm";
 import { db } from "@/lib/db";
 import { words, sentences } from "@/lib/db/schema";
+import { SpeakButton } from "@/app/components/SpeakButton";
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +34,10 @@ export default async function WordDetailPage({
       <Link href="/words" className="mb-4 inline-block text-sm text-stone-500 hover:text-stone-800">
         ← All words
       </Link>
-      <h1 className="text-3xl font-semibold tracking-tight">{word.bg}</h1>
+      <div className="flex items-center gap-2">
+        <h1 className="text-3xl font-semibold tracking-tight">{word.bg}</h1>
+        <SpeakButton text={word.bg} />
+      </div>
       <p className="mt-1 text-lg text-stone-600">{word.en}</p>
       {word.partOfSpeech && (
         <p className="mt-1 text-sm text-stone-400">{word.partOfSpeech}</p>
@@ -48,7 +52,10 @@ export default async function WordDetailPage({
         <ul className="flex flex-col gap-3">
           {examples.map((ex) => (
             <li key={ex.id} className="rounded-md border border-stone-200 bg-white px-4 py-3">
-              <p className="font-medium">{ex.bg}</p>
+              <div className="flex items-center gap-2">
+                <p className="font-medium">{ex.bg}</p>
+                <SpeakButton text={ex.bg} />
+              </div>
               <p className="mt-1 text-sm text-stone-500">{ex.en}</p>
             </li>
           ))}

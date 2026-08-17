@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { lessons, lessonWords, words, sentences } from "@/lib/db/schema";
 import { eq, inArray } from "drizzle-orm";
 import { getLessonSentences } from "@/lib/db/lesson-sentences";
+import { SpeakButton } from "@/app/components/SpeakButton";
 
 export const dynamic = "force-dynamic";
 
@@ -65,7 +66,10 @@ export default async function LessonPage({
           return (
             <li key={word.id} className="px-4 py-3">
               <div className="flex items-baseline justify-between">
-                <span className="font-medium">{word.bg}</span>
+                <span className="flex items-center gap-1.5">
+                  <span className="font-medium">{word.bg}</span>
+                  <SpeakButton text={word.bg} />
+                </span>
                 <span className="text-sm text-stone-500">{word.en}</span>
               </div>
               {example && (
@@ -87,7 +91,10 @@ export default async function LessonPage({
         <ul className="divide-y divide-stone-200 rounded-md border border-stone-200 bg-white">
           {readingSentences.map((s) => (
             <li key={s.id} className="px-4 py-3">
-              <p className="font-medium">{s.bg}</p>
+              <div className="flex items-center gap-1.5">
+                <p className="font-medium">{s.bg}</p>
+                <SpeakButton text={s.bg} />
+              </div>
               <p className="mt-1 text-sm text-stone-500">{s.en}</p>
             </li>
           ))}

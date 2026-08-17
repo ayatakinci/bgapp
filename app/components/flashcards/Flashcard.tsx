@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { SpeakButton } from "@/app/components/SpeakButton";
 
 type Props = {
   bg: string;
@@ -13,7 +14,10 @@ export function Flashcard({ bg, en, onAnswer }: Props) {
 
   return (
     <div className="flex w-full max-w-sm flex-col items-center gap-6 rounded-xl border border-stone-200 bg-white p-10 text-center shadow-sm">
-      <p className="text-3xl font-semibold tracking-tight">{bg}</p>
+      <div className="flex items-center gap-2">
+        <p className="text-3xl font-semibold tracking-tight">{bg}</p>
+        <SpeakButton text={bg} />
+      </div>
       {showAnswer ? (
         <>
           <p className="text-lg text-stone-600">{en}</p>

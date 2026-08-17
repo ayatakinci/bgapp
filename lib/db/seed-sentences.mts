@@ -5,7 +5,11 @@ import { words, sentences } from "./schema";
 
 const SENTENCES_FILE =
   "C:/Users/BCA/AppData/Local/Temp/claude/c--Users-BCA-OneDrive-Desktop-projects-langauagelearningapp/7bfb159f-5812-4d9e-81ee-ce27a4e2b427/scratchpad/bul.txt";
-const MAX_SENTENCES_PER_WORD = 4;
+// Raised from 4 -- common words feed both the word-detail page (needs 5)
+// and lesson-level sentence practice (needs up to ~100 per lesson, pooled
+// across a lesson's words). Rare words still won't reach this cap; it's a
+// ceiling, not a guarantee.
+const MAX_SENTENCES_PER_WORD = 25;
 // How much longer an inflected form can be than the stored word and still
 // count as a match, e.g. "куче" -> "кучето" (+2, definite article) or
 // "маса" -> "масите" (+2, definite plural). This mainly helps nouns, since
@@ -67,7 +71,7 @@ async function main() {
   // Collect every candidate sentence per word first, so we can sort by
   // length and keep the shortest (likely simplest) ones, rather than
   // whichever sentences happened to appear first in the file.
-  const candidatesByWord = new Map<number, { bg: string; en: string }[]>();
+  const candidatesByWord = new Map<number, { bg: string; en: string; matchedWord: string }[]>();
   const seenPairs = new Set<string>();
 
   for (const line of lines) {
@@ -85,12 +89,12 @@ async function main() {
       seenPairs.add(key);
 
       const list = candidatesByWord.get(match.id) ?? [];
-      list.push({ bg, en });
+      list.push({ bg, en, matchedWord: token });
       candidatesByWord.set(match.id, list);
     }
   }
 
-  const toInsert: { bg: string; en: string; wordId: number }[] = [];
+  const toInsert: { bg: string; en: string; matchedWord: string; wordId: number }[] = [];
   for (const [wordId, candidates] of candidatesByWord) {
     candidates.sort((a, b) => a.bg.length - b.bg.length);
     for (const c of candidates.slice(0, MAX_SENTENCES_PER_WORD)) {

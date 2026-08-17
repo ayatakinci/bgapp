@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { db } from "@/lib/db";
 import { lessons, lessonWords, words, sentences } from "@/lib/db/schema";
 import { eq, inArray } from "drizzle-orm";
@@ -40,7 +41,15 @@ export default async function LessonPage({
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-semibold tracking-tight">{lesson.title}</h1>
+      <div className="mb-6 flex items-baseline justify-between">
+        <h1 className="text-2xl font-semibold tracking-tight">{lesson.title}</h1>
+        <Link
+          href={`/lessons/${lessonId}/practice`}
+          className="rounded-md bg-stone-900 px-4 py-2 text-sm font-medium text-white hover:bg-stone-700"
+        >
+          Practice sentences
+        </Link>
+      </div>
       <ul className="divide-y divide-stone-200 rounded-md border border-stone-200 bg-white">
         {lessonWordsList.map((word) => {
           const example = sentencesByWord.get(word.id);

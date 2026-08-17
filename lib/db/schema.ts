@@ -39,6 +39,12 @@ export const sentences = pgTable(
     wordId: integer("word_id")
       .notNull()
       .references(() => words.id, { onDelete: "cascade" }),
+    // The literal token from `bg` that matched `words.bg` -- not always
+    // identical to it, since matching tolerates inflected forms (e.g.
+    // stored word "далеч" can match sentence token "далече"). Stored
+    // explicitly so a fill-in-the-blank exercise can blank the exact
+    // right substring instead of re-deriving it at render time.
+    matchedWord: text("matched_word").notNull(),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [index("sentences_word_id_idx").on(table.wordId)]
@@ -106,6 +112,7 @@ export const grammarTopics = pgTable("grammar_topics", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description"),
+  level: text("level").notNull().default("A1"), // "A1" | "A2" | "B1" | "B2"
   position: integer("position").notNull().unique(),
 });
 

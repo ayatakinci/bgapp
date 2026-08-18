@@ -115,9 +115,15 @@ export const grammarTopics = pgTable("grammar_topics", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description"),
-  // Longer-form prose: etymology, formality notes, cultural context --
-  // the "why", not just the one-line "what" in description.
+  // The rule/pattern itself -- kept short and structural (what it is, how
+  // it works), not a wall of prose.
   notes: text("notes"),
+  // A worked example distinct from the drills (which only ever show a
+  // blanked sentence) -- one complete, natural sentence demonstrating the
+  // rule, plus a shorter "watch out for" nuance.
+  example: text("example"),
+  exampleTranslation: text("example_translation"),
+  pitfall: text("pitfall"),
   level: text("level").notNull().default("A1"), // "A1" | "A2" | "B1" | "B2"
   position: integer("position").notNull().unique(),
 });
@@ -154,4 +160,20 @@ export const wordBank = pgTable(
     addedAt: timestamp("added_at").notNull().defaultNow(),
   },
   (table) => [primaryKey({ columns: [table.userId, table.wordId] })]
+);
+
+// Per-user progress on the /curriculum syllabus checklist. itemId matches
+// a SyllabusGrammarItem.id from lib/syllabus.ts (static reference data,
+// not a DB table) -- row presence means checked, so toggling is just
+// insert/delete, same pattern as wordBank.
+export const syllabusProgress = pgTable(
+  "syllabus_progress",
+  {
+    userId: integer("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    itemId: text("item_id").notNull(),
+    checkedAt: timestamp("checked_at").notNull().defaultNow(),
+  },
+  (table) => [primaryKey({ columns: [table.userId, table.itemId] })]
 );

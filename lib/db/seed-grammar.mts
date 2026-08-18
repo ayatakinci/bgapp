@@ -12,7 +12,14 @@ type DrillSeed = {
 type TopicSeed = {
   title: string;
   description: string;
+  // The rule/pattern itself -- short and structural.
   notes: string;
+  // One complete, natural sentence demonstrating the rule (distinct from
+  // the drills, which only ever show a blanked sentence).
+  example: string;
+  exampleTranslation: string;
+  // A shorter "watch out for" nuance or common mistake.
+  pitfall: string;
   level: "A1" | "A2" | "B1" | "B2";
   drills: DrillSeed[];
 };
@@ -20,10 +27,50 @@ type TopicSeed = {
 const TOPICS: TopicSeed[] = [
   // ---------- A1 ----------
   {
+    title: "Cyrillic alphabet",
+    description: "Аа Бб Вв Гг Дд… all 30 letters, upper & lower case",
+    notes:
+      "Bulgarian uses 30 Cyrillic letters, each with an uppercase and lowercase form. Most map to a single, consistent sound -- once you know a letter's sound, every word using it is pronounced exactly as written, unlike English spelling.",
+    example: "Аз обичам България.",
+    exampleTranslation: "I love Bulgaria.",
+    pitfall:
+      "A few letters look like Latin ones but sound completely different -- Р is \"r\" not \"p\", Н is \"n\" not \"h\", У is \"u\" not \"y\" -- reading these on autopilot from Latin habits is the single most common early mistake.",
+    level: "A1",
+    drills: [
+      { promptBg: "Главната буква за 'б' е ___.", promptEn: "The uppercase letter for 'б' is ___.", correctAnswer: "Б", options: ["Б", "В", "П", "Р"] },
+      { promptBg: "Малката буква за 'Ж' е ___.", promptEn: "The lowercase letter for 'Ж' is ___.", correctAnswer: "ж", options: ["ж", "х", "з", "щ"] },
+      { promptBg: "Буквата 'Р' звучи като ___.", promptEn: "The letter 'Р' sounds like ___.", correctAnswer: "r", options: ["r", "p", "g", "n"] },
+      { promptBg: "Буквата 'Н' звучи като ___.", promptEn: "The letter 'Н' sounds like ___.", correctAnswer: "n", options: ["n", "h", "p", "m"] },
+      { promptBg: "Буквата 'У' звучи като ___.", promptEn: "The letter 'У' sounds like ___.", correctAnswer: "u", options: ["u", "y", "v", "i"] },
+      { promptBg: "Главната буква за 'щ' е ___.", promptEn: "The uppercase letter for 'щ' is ___.", correctAnswer: "Щ", options: ["Щ", "Ш", "Ч", "Ц"] },
+    ],
+  },
+  {
+    title: "Personal pronouns",
+    description: "аз, ти, той, тя, то, ние, вие, те",
+    notes:
+      "Bulgarian has eight personal pronouns: аз (I), ти (you, informal), той/тя/то (he/she/it, split by grammatical gender), ние (we), вие (you, formal/plural), те (they).",
+    example: "Аз съм от Турция, а тя е от България.",
+    exampleTranslation: "I am from Turkey, and she is from Bulgaria.",
+    pitfall:
+      "Той/тя/то tracks grammatical gender, not biological sex -- a neuter noun like дете (child) takes то even for a human child, which surprises English speakers used to \"he/she\" being about the person, not the word.",
+    level: "A1",
+    drills: [
+      { promptBg: "Мария е тук. ___ е тук.", promptEn: "Maria is here. ___ is here.", correctAnswer: "Тя", options: ["Тя", "Той", "То", "Те"] },
+      { promptBg: "Иван и Петър играят. ___ играят.", promptEn: "Ivan and Petar are playing. ___ are playing.", correctAnswer: "Те", options: ["Те", "Той", "Тя", "Ние"] },
+      { promptBg: "Аз и ти сме приятели. ___ сме приятели.", promptEn: "You and I are friends. ___ are friends.", correctAnswer: "Ние", options: ["Ние", "Вие", "Те", "Аз"] },
+      { promptBg: "Детето спи. ___ спи.", promptEn: "The child is sleeping. ___ is sleeping.", correctAnswer: "То", options: ["То", "Той", "Тя", "Те"] },
+    ],
+  },
+  {
     title: "\"To be\" (съм)",
     description: "аз съм, ти си, той/тя/то е, ние сме, вие сте, те са",
     notes:
-      "Съм is Bulgarian's only truly irregular verb and its most common one -- every person has its own unique form, unlike regular verbs that share endings across a conjugation class. Unlike English, Bulgarian happily drops the subject pronoun (\"студент съм\" works fine without \"аз\"), since the verb ending already signals who's speaking. Negation just adds не before it (не съм, not \"съм не\"), and questions add ли right after it, not a helper verb at the front like English \"is he...?\".",
+      "Съм is Bulgarian's only fully irregular verb -- every person (аз, ти, той...) has its own unique form, unlike regular verbs that share predictable endings.",
+    example: "Аз съм учител, а ти си студент.",
+    exampleTranslation: "I am a teacher, and you are a student.",
+    pitfall:
+      "The subject pronoun is often dropped entirely (\"студент съм\" works without \"аз\", since the ending already says who); negation just adds не before it (не съм), and questions add ли right after it, not a helper verb up front like English \"is he...?\".",
     level: "A1",
     drills: [
       { promptBg: "Аз ___ студент.", promptEn: "I am a student.", correctAnswer: "съм", options: ["съм", "си", "е", "сме"] },
@@ -38,7 +85,11 @@ const TOPICS: TopicSeed[] = [
     title: "Present tense verb endings",
     description: "-ам/-я/-и verb families",
     notes:
-      "Bulgarian verbs fall into three conjugation families based on their 1st-person-singular ending: -а/-я verbs (чета → чета, четеш, чете...), -и verbs (говоря → говоря, говориш, говори...), and a smaller -е class. Once you know a verb's family, the rest of its present-tense endings are fully predictable -- there's no irregular \"do/does\" pattern to memorize like in English. The tricky part for beginners is usually stress: it can shift between forms (говоря vs говорим), and getting it wrong doesn't block understanding but does mark you as a learner.",
+      "Verbs fall into three conjugation families based on their 1st-person-singular ending: -а/-я (чета), -и (говоря), and a smaller -е class. Once you know a verb's family, every other present-tense ending is fully predictable.",
+    example: "Тя чете книга, а аз говоря по телефона.",
+    exampleTranslation: "She is reading a book, and I am talking on the phone.",
+    pitfall:
+      "Stress can shift between forms of the same verb (говоря vs говорим) -- getting it wrong doesn't block understanding, but does mark you as a learner.",
     level: "A1",
     drills: [
       { promptBg: "Тя ___ книга.", promptEn: "She reads a book.", correctAnswer: "чете", options: ["чете", "чета", "четеш", "четат"] },
@@ -50,8 +101,11 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Negation",
     description: "не before the verb",
-    notes:
-      "Negation is simpler than English's: just put не directly in front of the verb, with no auxiliary \"do/does\" needed (English \"I don't understand\" vs Bulgarian \"не разбирам\" -- literally \"not I-understand\"). One place English speakers trip up is double negation: where English treats \"I don't want nothing\" as wrong, Bulgarian requires it -- \"Не искам нищо\" (not I-want nothing) is the only correct way to say \"I don't want anything\".",
+    notes: "Negation just puts не directly before the verb -- no auxiliary \"do/does\" needed, unlike English.",
+    example: "Не разбирам испански, но разбирам английски.",
+    exampleTranslation: "I don't understand Spanish, but I understand English.",
+    pitfall:
+      "Double negation is required, not wrong: \"Не искам нищо\" (literally \"not I-want nothing\") is the only correct way to say \"I don't want anything\".",
     level: "A1",
     drills: [
       { promptBg: "Аз ___ разбирам.", promptEn: "I don't understand.", correctAnswer: "не", options: ["не", "ли", "и", "но"] },
@@ -63,7 +117,11 @@ const TOPICS: TopicSeed[] = [
     title: "Yes/no questions (ли)",
     description: "verb + ли",
     notes:
-      "Bulgarian turns a statement into a yes/no question by inserting the tiny particle ли directly after the word being questioned -- almost always the verb, right at the start of the sentence (Говориш ли английски? -- \"Do you speak English?\"). There's no word-order inversion and no \"do/does\" support like in English; the statement's word order stays intact, ли is the only signal. Because ли is an enclitic (it leans on the word before it and is never stressed itself), it can also shift to question a different word specifically, e.g. putting it after \"английски\" instead would ask specifically about English rather than about speaking in general.",
+      "Insert the tiny particle ли directly after the word being questioned -- almost always the verb -- to turn a statement into a yes/no question. No word-order inversion, no \"do/does\" support.",
+    example: "Говориш ли английски?",
+    exampleTranslation: "Do you speak English?",
+    pitfall:
+      "Ли can shift to question a different word specifically -- putting it after \"английски\" instead asks specifically about English, not about speaking in general.",
     level: "A1",
     drills: [
       { promptBg: "Говориш ___ английски?", promptEn: "Do you speak English?", correctAnswer: "ли", options: ["ли", "не", "и", "но"] },
@@ -75,7 +133,11 @@ const TOPICS: TopicSeed[] = [
     title: "Definite article",
     description: "the -та/-то/-ът/-те tail",
     notes:
-      "Bulgarian is one of the few Slavic languages to have a definite article at all -- most of its relatives (Russian, Polish, Czech) have none. Rather than a separate word like English \"the\", it's a suffix glued onto the end of the noun itself, and which suffix depends on the noun's gender: -та for feminine (книга → книгата), -то for neuter (дете → детето), -ът/-я for masculine (мъж → мъжът), and -те for all plurals. Masculine nouns additionally distinguish a subject form (-ът) from an object form (-а) in careful/formal writing, though spoken Bulgarian often blurs this distinction.",
+      "\"The\" is a suffix glued onto the end of the noun, not a separate word -- which suffix depends on gender: -та (feminine), -то (neuter), -ът/-я (masculine), -те (all plurals).",
+    example: "Книгата е на масата, а столът е до прозореца.",
+    exampleTranslation: "The book is on the table, and the chair is by the window.",
+    pitfall:
+      "Masculine nouns distinguish a subject form (-ът) from an object form (-а) in careful writing (столът sits vs. виждам стола), though spoken Bulgarian often blurs this.",
     level: "A1",
     drills: [
       { promptBg: "___ е на масата.", promptEn: "The book is on the table.", correctAnswer: "Книгата", options: ["Книгата", "Книга", "Книги", "Книгите"] },
@@ -87,7 +149,11 @@ const TOPICS: TopicSeed[] = [
     title: "Plurals",
     description: "one word, many words",
     notes:
-      "Plural formation depends heavily on gender and the noun's ending, so there's no single \"add -s\" rule like English. Feminine nouns ending in -а/-я usually swap it for -и (книга → книги). Masculine nouns typically add -и too (студент → студенти), but short monosyllabic masculine nouns often take a special counting form ending in -а used only after numbers 2-10 (два часа, not два часове). Neuter nouns are the least predictable, splitting between -а (дете → деца) and -та/-ета (яйце → яйца, but куче → кучета) depending on the singular ending.",
+      "No single \"add -s\" rule -- plural formation depends on gender and the noun's ending. Feminine -а/-я swaps to -и (книга→книги); masculine typically adds -и (студент→студенти); neuter splits between -а and -та/-ета (дете→деца, куче→кучета).",
+    example: "Имам две книги и едно куче.",
+    exampleTranslation: "I have two books and one dog.",
+    pitfall:
+      "Short monosyllabic masculine nouns take a special counting form ending in -а used only after numbers 2-10: два часа, not два часове.",
     level: "A1",
     drills: [
       { promptBg: "Имам две ___.", promptEn: "I have two books.", correctAnswer: "книги", options: ["книги", "книга", "книгата", "книгите"] },
@@ -99,7 +165,11 @@ const TOPICS: TopicSeed[] = [
     title: "Question words",
     description: "кой, какво, къде, кога, защо, как, колко",
     notes:
-      "Most of these behave exactly like their English counterparts, but кой (\"who/which\") is unusual in actually agreeing in gender and number with what it's asking about -- коя книга (which book, feminine), кое дете (which child, neuter), кои хора (which people, plural). Как is doing double duty worth noticing: besides \"how\" (Как си? -- \"How are you?\"), it's the standard way to ask someone's name (Как се казваш? -- literally \"How do you call yourself?\"), which trips up learners expecting a \"what\" question there.",
+      "Most question words behave like their English counterparts, but кой (\"who/which\") is unusual in agreeing in gender and number with what it's asking about: коя книга, кое дете, кои хора.",
+    example: "Какво правиш и къде живееш?",
+    exampleTranslation: "What are you doing and where do you live?",
+    pitfall:
+      "Как does double duty: besides \"how\" (Как си?), it's the standard way to ask someone's name (Как се казваш? -- literally \"how do you call yourself\"), not a \"what\" question like English expects.",
     level: "A1",
     drills: [
       { promptBg: "___ е той?", promptEn: "Who is he?", correctAnswer: "Кой", options: ["Кой", "Какво", "Къде", "Кога"] },
@@ -113,8 +183,11 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Adjectives and agreement",
     description: "голям/голяма/голямо/големи, добър/добра/добро/добри, хубав/хубава/хубаво/хубави",
-    notes:
-      "Every adjective has four forms and must agree with the noun it describes: masculine, feminine (-а), neuter (-о), and plural (-и), regardless of the noun's own gender-marking suffix. This is stricter than English (which has no adjective agreement at all) but more forgiving than languages with full case systems, since Bulgarian adjectives don't also change for grammatical case. The masculine form is the trickiest to guess from the dictionary entry, since it can end in a consonant (добър), -и (хубав → but this one's regular), or drop a vowel in the stem entirely (as добър does: masc. добър but fem. добра, losing the -ъ-).",
+    notes: "Every adjective has four forms and must agree with the noun it describes: masculine, feminine (-а), neuter (-о), plural (-и).",
+    example: "Той е добър приятел, а тя е добра учителка.",
+    exampleTranslation: "He is a good friend, and she is a good teacher.",
+    pitfall:
+      "The masculine form is trickiest to guess from a dictionary entry -- добър drops its stem vowel in every other form (fem. добра, not \"добъра\").",
     level: "A1",
     drills: [
       { promptBg: "Това е ___ къща.", promptEn: "This is a big house.", correctAnswer: "голяма", options: ["голяма", "голям", "голямо", "големи"] },
@@ -127,8 +200,11 @@ const TOPICS: TopicSeed[] = [
   {
     title: "This / that",
     description: "този (m), тази (f), това (n), тези (pl)",
-    notes:
-      "Like adjectives, demonstratives agree in gender and number with their noun: този мъж, тази жена, това дете, тези хора. Bulgarian also keeps a separate, less common \"that (over there)\" set -- онзи/онази/онова/онези -- for things genuinely distant from the speaker, a distinction English collapsed into just \"this\" vs \"that\" long ago. In casual speech, тоя/тая/тва are common contracted alternatives to този/тази/това that you'll hear constantly but shouldn't write in anything formal.",
+    notes: "Demonstratives agree in gender and number with their noun, just like adjectives: този мъж, тази жена, това дете, тези хора.",
+    example: "Тази книга е моя, а онази е твоя.",
+    exampleTranslation: "This book is mine, and that one (over there) is yours.",
+    pitfall:
+      "Bulgarian also keeps a separate \"that, over there\" set (онзи/онази/онова/онези) for things genuinely distant, a distinction English collapsed into just \"this\" vs \"that\" long ago.",
     level: "A1",
     drills: [
       { promptBg: "___ книга е моя.", promptEn: "This book is mine.", correctAnswer: "Тази", options: ["Тази", "Този", "Това", "Тези"] },
@@ -140,8 +216,11 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Possession",
     description: "ми, ти, му, ѝ, ни, ви, им",
-    notes:
-      "Rather than a possessive word before the noun (English \"my house\"), Bulgarian usually attaches a short pronoun right after the (definite) noun: къщата ми -- literally \"the-house to-me\". These short forms are technically dative pronouns doing possession duty, which is why they look like indirect-object pronouns elsewhere in the grammar. Bulgarian does also have full possessive adjectives (мой, твой, негов, неин...) that agree in gender like other adjectives, but they're reserved for emphasis or formal writing -- the short enclitic forms are what you'll actually hear in everyday speech.",
+    notes: "Rather than a possessive word before the noun, Bulgarian attaches a short pronoun right after the (definite) noun: къщата ми -- literally \"the-house to-me\".",
+    example: "Колата ми е нова, а къщата им е стара.",
+    exampleTranslation: "My car is new, and their house is old.",
+    pitfall:
+      "These short forms are technically dative pronouns doing possession duty. Full possessive adjectives (мой, твой, негов...) exist too, but are reserved for emphasis or formal writing.",
     level: "A1",
     drills: [
       { promptBg: "Кафето ___ е студено.", promptEn: "My coffee is cold.", correctAnswer: "ми", options: ["ми", "ти", "му", "ни"] },
@@ -155,7 +234,11 @@ const TOPICS: TopicSeed[] = [
     title: "Prepositions",
     description: "в, на, от, до, с, за",
     notes:
-      "The single biggest headache here for English speakers is that в and на both cover ground that English splits between \"in\", \"at\", and \"on\": в софия (in Sofia) but на масата (on the table) and на работа (at work) -- there's no reliable rule, just usage that has to be learned noun by noun. Bulgarian also has no separate word for possession's \"of\" -- на does that job too (къщата на Иван, \"Ivan's house\", literally \"the house of Ivan\") since Bulgarian lost the genitive case that other Slavic languages use for this instead.",
+      "В and на both cover ground English splits between \"in\", \"at\", and \"on\" -- в София (in Sofia) but на масата (on the table), на работа (at work) -- with no reliable rule, just usage learned noun by noun.",
+    example: "Живея в София и работя на пазара.",
+    exampleTranslation: "I live in Sofia and work at the market.",
+    pitfall:
+      "На also covers possession's \"of\" (къщата на Иван -- \"Ivan's house\"), since Bulgarian lost the genitive case other Slavic languages use for this.",
     level: "A1",
     drills: [
       { promptBg: "Живея ___ София.", promptEn: "I live in Sofia.", correctAnswer: "в", options: ["в", "на", "от", "с"] },
@@ -170,7 +253,10 @@ const TOPICS: TopicSeed[] = [
     title: "Modal verbs",
     description: "мога (can), трябва (must), искам да (want to)",
     notes:
-      "Bulgarian lost the infinitive form entirely (unlike most other European languages, including its Slavic relatives), so there's no equivalent of English \"to speak\" as a bare verb form to plug after a modal. Instead, every modal construction uses да + a present-tense verb conjugated for the actual subject: искам да говоря (\"I want that-I speak\"), literally a subordinate clause standing in for what English does with an infinitive. Трябва is also unusual in staying the same for every person (трябва да отида, трябва да отидеш, трябва да отиде...) -- only the verb after да changes, not трябва itself.",
+      "Bulgarian lost the infinitive entirely, so every modal construction uses да + a present-tense verb conjugated for the actual subject: искам да говоря (\"I want that-I speak\").",
+    example: "Трябва да работя, но искам да почивам.",
+    exampleTranslation: "I have to work, but I want to rest.",
+    pitfall: "Трябва stays the same for every person (трябва да отида/отидеш/отиде...) -- only the verb after да changes, never трябва itself.",
     level: "A1",
     drills: [
       { promptBg: "___ да говоря малко български.", promptEn: "I can speak a little Bulgarian.", correctAnswer: "Мога", options: ["Мога", "Трябва", "Искам", "Обичам"] },
@@ -182,7 +268,11 @@ const TOPICS: TopicSeed[] = [
     title: "\"I like\"",
     description: "харесва ми / обичам",
     notes:
-      "Харесва ми works like Spanish \"me gusta\" or French \"ça me plaît\": the thing liked is the grammatical subject, and the person doing the liking appears as a dative pronoun (Харесва ми София -- literally \"Sofia pleases to-me\"). This flips the sentence structure English speakers expect, where \"I\" is the subject. Обичам is more straightforward -- a normal transitive verb (\"I love/like X\") -- but it's stronger than харесва ми and gets used for both people you love and things you genuinely love (обичам кафе), so context decides whether it reads as \"love\" or just \"really like\".",
+      "Харесва ми flips the sentence English speakers expect: the thing liked is the subject, and the person liking it appears as a dative pronoun (Харесва ми София -- literally \"Sofia pleases to-me\").",
+    example: "Харесва ми София, но обичам Пловдив повече.",
+    exampleTranslation: "I like Sofia, but I love Plovdiv more.",
+    pitfall:
+      "Обичам is a normal transitive verb, but stronger -- used for both people you love and things you really like, so context decides whether it reads as \"love\" or just \"really like\".",
     level: "A1",
     drills: [
       { promptBg: "Харесва ___ София.", promptEn: "I like Sofia.", correctAnswer: "ми", options: ["ми", "ти", "му", "ни"] },
@@ -193,8 +283,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Future tense",
     description: "ще + verb",
-    notes:
-      "Ще is an invariant particle -- it never conjugates, no matter the subject (ще говоря, ще говориш, ще говори all use the same ще). It started historically as the verb \"to want\" and grammaticalized into a pure future marker, similar to how English \"will\" originally meant \"to want\" too. The negative future isn't не ще but a separate word entirely, няма да + present tense (няма да дойда -- \"I won't come\"), which is worth memorizing as its own fixed pattern rather than trying to derive it from ще's negation.",
+    notes: "Ще is an invariant particle before the present tense -- it never conjugates, no matter the subject: ще говоря, ще говориш, ще говори.",
+    example: "Утре ще работя, но няма да ходя на училище.",
+    exampleTranslation: "Tomorrow I will work, but I won't go to school.",
+    pitfall: "The negative future isn't \"не ще\" -- it's a separate fixed pattern, няма да + present tense (няма да дойда, \"I won't come\").",
     level: "A1",
     drills: [
       { promptBg: "Утре ___ работя.", promptEn: "Tomorrow I will work.", correctAnswer: "ще", options: ["ще", "не", "ли", "е"] },
@@ -205,8 +297,11 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Past tense (basic)",
     description: "бях (I was), ядох, казах, отидох",
-    notes:
-      "This introduces the aorist, Bulgarian's default tense for narrating a single completed past event -- the one you'll use constantly telling someone what you did yesterday. It's a separate topic from the aorist-vs-imperfect distinction covered later (A2), which is about choosing between two different past tenses; here the goal is just recognizing and forming the aorist itself. Note that Bulgarian's aorist endings vary more by verb than the present tense's do, so these common irregular-looking forms (бях, ядох, казах) are worth memorizing individually before tackling the fuller pattern.",
+    notes: "The aorist is Bulgarian's default tense for narrating a single completed past event -- the one you'll use constantly telling someone what you did yesterday.",
+    example: "Вчера ядох хляб и казах здравей на съседа.",
+    exampleTranslation: "Yesterday I ate bread and said hello to the neighbor.",
+    pitfall:
+      "Aorist endings vary more by verb than the present tense's do -- common irregular-looking forms (бях, ядох, казах) are worth memorizing individually first.",
     level: "A1",
     drills: [
       { promptBg: "___ в България миналата година.", promptEn: "I was in Bulgaria last year.", correctAnswer: "Бях", options: ["Бях", "Съм", "Ще съм", "Бъда"] },
@@ -219,7 +314,11 @@ const TOPICS: TopicSeed[] = [
     title: "Imperative (basic)",
     description: "дай, кажи, извинете",
     notes:
-      "The imperative has just two real forms per verb: one for ти (informal singular, дай) and one shared by вие -- both the plural \"you all\" and the formal singular \"you\" (дайте), the same politeness distinction French makes with tu/vous. Извинете is worth learning as a fixed phrase before the pattern behind it makes sense: it's literally the formal/plural imperative of извинявам (\"to excuse\"), used by default even toward one stranger, since starting a request with the informal Извини would feel oddly familiar.",
+      "The imperative has just two forms per verb: one for ти (informal singular, дай) and one shared by вие -- both plural \"you all\" and formal singular \"you\" (дайте).",
+    example: "Дай ми менюто, моля, и кажете ми цената.",
+    exampleTranslation: "Give me the menu, please, and tell me the price.",
+    pitfall:
+      "Извинете is the formal/plural imperative of извинявам, used by default even toward one stranger -- the informal Извини would feel oddly familiar.",
     level: "A1",
     drills: [
       { promptBg: "___ ми молив, моля.", promptEn: "Give me a pencil, please.", correctAnswer: "Дай", options: ["Дай", "Дайте", "Кажи", "Вземи"] },
@@ -231,7 +330,10 @@ const TOPICS: TopicSeed[] = [
     title: "Connecting sentences",
     description: "и, но, защото, затова",
     notes:
-      "These four cover most everyday sentence-linking: и (\"and\"), но (\"but\"), защото (\"because\", introducing the reason), and затова (\"so/that's why\", introducing the result) -- notice защото and затова are near-mirror images of each other, one pointing backward to a cause and the other forward to a consequence, which makes them easy to mix up at first. Unlike English \"because\", защото can't start a sentence on its own as a sentence fragment answer to \"why\" in formal writing, though it's completely normal in speech (Защо? Защото.).",
+      "И (\"and\"), но (\"but\"), защото (\"because\"), and затова (\"so/that's why\") cover most everyday sentence-linking -- защото points backward to a cause, затова forward to a consequence.",
+    example: "Не отидох, защото валеше, и затова останах вкъщи.",
+    exampleTranslation: "I didn't go because it was raining, and so I stayed home.",
+    pitfall: "Защото and затова are near-mirror images of each other, which makes them easy to mix up at first.",
     level: "A1",
     drills: [
       { promptBg: "Обичам кафе, ___ не обичам чай.", promptEn: "I love coffee but I don't love tea.", correctAnswer: "но", options: ["но", "и", "защото", "затова"] },
@@ -246,7 +348,11 @@ const TOPICS: TopicSeed[] = [
     title: "Aorist vs imperfect",
     description: "completed past action vs ongoing/habitual past",
     notes:
-      "Where English uses one simple past for everything (\"I read\", \"I lived\"), Bulgarian forces a choice between two past tenses every time: aorist for a single, completed, bounded event (четох -- \"I read [and finished]\"), and imperfect for something ongoing, repeated, or habitual in the past (четях -- \"I was reading\" / \"I used to read\"). This is a genuinely different way of carving up time than English grammar does, so the useful mental test isn't tense-translation but asking \"was this one finished action, or a state/habit/backdrop?\" This distinction is separate from verbal aspect (covered at B1) -- aspect is a property of the verb itself, while this is about which past tense you conjugate it into.",
+      "Bulgarian forces a choice between two past tenses every time: aorist for a single, completed, bounded event (четох); imperfect for something ongoing, repeated, or habitual (четях).",
+    example: "Като дете живеех във Варна, но миналата година живях в София.",
+    exampleTranslation: "As a child I used to live in Varna, but last year I lived in Sofia.",
+    pitfall:
+      "The useful test isn't tense-translation but asking \"was this one finished action, or a state/habit/backdrop?\" -- this is separate from verbal aspect (B1), which is a property of the verb itself.",
     level: "A2",
     drills: [
       { promptBg: "Вчера ___ книга цял ден.", promptEn: "Yesterday I was reading a book all day.", correctAnswer: "четях", options: ["четях", "четох", "чета", "ще чета"] },
@@ -258,7 +364,10 @@ const TOPICS: TopicSeed[] = [
     title: "Comparison of adjectives",
     description: "по- (more), най- (most)",
     notes:
-      "Bulgarian builds comparatives and superlatives with prefixes rather than English's mix of -er/-est suffixes and separate \"more/most\": по- attaches to any adjective for \"more\" (голям → по-голям, \"bigger\") and най- for \"most\" (най-голям, \"biggest\") -- no irregular forms to memorize like English \"good/better/best\". Because it's a prefix rather than a separate word, по- and най- attach directly onto the adjective and still fully agree in gender with the noun (по-голяма къща, feminine), so agreement rules from basic adjectives still apply on top of the comparison.",
+      "По- attaches to any adjective for \"more\" (голям→по-голям) and най- for \"most\" (най-голям) -- no irregular forms to memorize like English \"good/better/best\".",
+    example: "Тази къща е по-голяма, но онази е най-голямата в града.",
+    exampleTranslation: "This house is bigger, but that one is the biggest in the city.",
+    pitfall: "Because по-/най- are prefixes, not separate words, they still fully agree in gender with the noun: по-голяма къща (feminine).",
     level: "A2",
     drills: [
       { promptBg: "Този дом е ___ от онзи.", promptEn: "This house is bigger than that one.", correctAnswer: "по-голям", options: ["по-голям", "голям", "най-голям", "голяма"] },
@@ -269,8 +378,11 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Ordinal numbers",
     description: "първи, втори, трети...",
-    notes:
-      "Ordinals behave as regular adjectives and agree in gender/number like any other: първи (masc.), първа (fem.), първо (neut.), първи (plural, coincidentally identical to masculine singular here). Първи (\"first\") is irregular and unrelated to the cardinal number едно, similar to how English \"first\" doesn't derive from \"one\" -- but from второ (\"second\") onward, most ordinals are built predictably from the cardinal number plus an adjective ending (три → трети).",
+    notes: "Ordinals behave as regular adjectives and agree in gender/number: първи, първа, първо, and plural първи.",
+    example: "Той живее на третия етаж, а тя -- на първия.",
+    exampleTranslation: "He lives on the third floor, and she on the first.",
+    pitfall:
+      "Първи (\"first\") is irregular, unrelated to the cardinal едно -- but from второ (\"second\") onward, most ordinals build predictably from the cardinal plus an adjective ending (три→трети).",
     level: "A2",
     drills: [
       { promptBg: "Той живее на ___ етаж.", promptEn: "He lives on the second floor.", correctAnswer: "втория", options: ["втория", "втори", "две", "второ"] },
@@ -282,7 +394,11 @@ const TOPICS: TopicSeed[] = [
     title: "Reflexive verbs",
     description: "се-verbs",
     notes:
-      "Се marks that the subject and object of the verb are the same person -- \"washes himself\", \"see each other\" -- and sits in a fixed slot early in the sentence (right after the verb, or before it if something else like не comes first) rather than after the verb the way English \"-self\" pronouns do. Some verbs are only ever used with се and don't really have a non-reflexive meaning at all (казвам се -- \"to be called/named\" -- doesn't mean anything as bare казвам in that sense), so these are worth learning as fixed units rather than deriving се's meaning fresh each time.",
+      "Се marks that the subject and object of the verb are the same person, and sits in a fixed early slot in the sentence -- not after the verb the way English \"-self\" pronouns do.",
+    example: "Казвам се Иван и виждаме се утре.",
+    exampleTranslation: "My name is Ivan (I call myself Ivan), and we'll see each other tomorrow.",
+    pitfall:
+      "Some verbs only ever exist with се (казвам се -- \"to be called\" -- means nothing as bare казвам in that sense), so these are worth learning as fixed units.",
     level: "A2",
     drills: [
       { promptBg: "Аз ___ казвам Иван.", promptEn: "My name is Ivan.", correctAnswer: "се", options: ["се", "си", "го", "ги"] },
@@ -294,7 +410,10 @@ const TOPICS: TopicSeed[] = [
     title: "Long vs short object pronouns",
     description: "го vs него, ме vs мен -- short forms in normal position, long forms for emphasis or after prepositions",
     notes:
-      "Bulgarian object pronouns come in two versions: short, unstressed clitic forms (го, ме, му, ми...) used in ordinary sentences, and long, stressed forms (него, мен, на него, на мен...) reserved for after a preposition, for standalone emphasis, or when the pronoun starts the sentence. This is a genuine doubling system, not just style -- за мен (\"for me\") requires the long form after a preposition, while an ordinary statement (\"I see him\") requires the short form (Виждам го), and mixing them up is a very recognizable non-native mistake.",
+      "Object pronouns come in two versions: short, unstressed clitic forms (го, ме, му...) for ordinary sentences, and long, stressed forms (него, мен...) after a preposition or for emphasis.",
+    example: "Виждам го всеки ден, но подаръкът е за мен, не за него.",
+    exampleTranslation: "I see him every day, but the gift is for me, not for him.",
+    pitfall: "This is a real doubling system, not just style -- mixing up short and long forms is a very recognizable non-native mistake.",
     level: "A2",
     drills: [
       { promptBg: "Виждам ___.", promptEn: "I see him.", correctAnswer: "го", options: ["го", "него", "му", "си"] },
@@ -306,7 +425,11 @@ const TOPICS: TopicSeed[] = [
     title: "\"Има / няма\"",
     description: "there is / there isn't",
     notes:
-      "Има and няма are invariant across every person and number in the present tense -- unlike English, which conjugates \"to be\" (\"there is\" vs \"there are\"), Bulgarian just uses има or няма regardless of what follows. The related verb имам (\"to have\", for ordinary possession -- имам, имаш, има...) does fully conjugate, so it's worth keeping the two uses distinct: имам мляко is \"I have milk\", while Има мляко is the existential \"There is milk\", sharing a root but working differently in the sentence.",
+      "Има and няма are invariant across every person and number -- unlike English \"there is\" vs \"there are\", Bulgarian just uses има or няма regardless of what follows.",
+    example: "Има мляко в хладилника, но няма хляб.",
+    exampleTranslation: "There is milk in the fridge, but there's no bread.",
+    pitfall:
+      "The related verb имам (\"to have\") does fully conjugate -- имам мляко (\"I have milk\") is a different sentence from Има мляко (\"There is milk\"), sharing a root but working differently.",
     level: "A2",
     drills: [
       { promptBg: "___ мляко в хладилника.", promptEn: "There is milk in the fridge.", correctAnswer: "Има", options: ["Има", "Няма", "Е", "Са"] },
@@ -318,7 +441,11 @@ const TOPICS: TopicSeed[] = [
     title: "Adverbs",
     description: "formed from adjectives, usually the neuter form",
     notes:
-      "Most Bulgarian adverbs are simply the adjective's neuter singular form used on its own -- бавен (\"slow\", masc.) becomes бавно (\"slowly\") by reaching for the same -о ending already used for neuter agreement, rather than adding a distinct suffix the way English adds -ly. This means once you know an adjective's four gender forms, you already know its adverb for free: no separate vocabulary to learn. A handful of high-frequency adverbs are irregular or unrelated to any adjective (добре -- \"well\" -- rather than a form of добър), and those are worth memorizing individually.",
+      "Most adverbs are simply an adjective's neuter singular form used on its own: бавен (\"slow\") becomes бавно (\"slowly\") -- the same -о already used for neuter agreement, no separate suffix needed.",
+    example: "Той говори бавно, но работи добре.",
+    exampleTranslation: "He speaks slowly, but works well.",
+    pitfall:
+      "A handful of high-frequency adverbs are irregular or unrelated to any adjective -- добре (\"well\") rather than a form of добър -- worth memorizing individually.",
     level: "A2",
     drills: [
       { promptBg: "Той говори ___.", promptEn: "He speaks slowly.", correctAnswer: "бавно", options: ["бавно", "бавен", "бавна", "бавни"] },
@@ -329,8 +456,11 @@ const TOPICS: TopicSeed[] = [
   {
     title: "\"Ако\" (if) clauses",
     description: "real/likely conditions",
-    notes:
-      "Ако clauses cover \"real\" conditionals -- things that genuinely could happen (Ако вали, ще остана вкъщи -- \"If it rains, I'll stay home\") -- and pattern closely with English if-clauses: condition first, ще-future in the result. This is a separate, simpler system from the conditional mood covered at B1 (бих, би...), which handles hypothetical or contrary-to-fact situations (\"if I had...\", \"I would...\"); mixing the two up is a common learner error, since English \"if\" covers both cases with the same word while Bulgarian expects ако + present tense here and a different construction for the unreal cases.",
+    notes: "Ако clauses cover \"real\" conditionals -- things that genuinely could happen -- and pattern closely with English if-clauses: condition first, ще-future in the result.",
+    example: "Ако вали утре, ще остана вкъщи.",
+    exampleTranslation: "If it rains tomorrow, I'll stay home.",
+    pitfall:
+      "This is a separate, simpler system from the conditional mood (B1, бих/би...), which handles hypothetical or contrary-to-fact situations -- English \"if\" covers both with the same word, Bulgarian doesn't.",
     level: "A2",
     drills: [
       { promptBg: "___ вали, ще остана вкъщи.", promptEn: "If it rains, I'll stay home.", correctAnswer: "Ако", options: ["Ако", "Че", "Когато", "Затова"] },
@@ -340,8 +470,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Prepositions of time",
     description: "след, преди, през",
-    notes:
-      "След (\"after/in [duration]\") and преди (\"before/[duration] ago\") are mirror images of each other on the timeline, both usable for a specific point (преди обяд -- \"before noon\") or a duration counting forward/back from now (след два часа -- \"in two hours\"). През is the odd one out, meaning \"during/throughout\" a period rather than marking a boundary -- през 1990 година (\"in 1990\"), през лятото (\"during the summer\") -- and is the one English speakers most often skip in favor of на or в out of habit from English \"in [year]\".",
+    notes: "След (\"after/in [duration]\") and преди (\"before/ago\") are mirror images on the timeline: преди обяд (\"before noon\"), след два часа (\"in two hours\").",
+    example: "Пристигнах преди обяд и заминах след два часа.",
+    exampleTranslation: "I arrived before noon and left two hours later.",
+    pitfall: "През is the odd one out -- \"during/throughout\" a period (през 1990 година, през лятото) -- and is the one English speakers most often skip in favor of на or в.",
     level: "A2",
     drills: [
       { promptBg: "Ще се видим ___ два часа.", promptEn: "We'll meet in two hours.", correctAnswer: "след", options: ["след", "преди", "по", "на"] },
@@ -355,7 +487,11 @@ const TOPICS: TopicSeed[] = [
     title: "Verbal aspect (intro)",
     description: "imperfective (ongoing/habitual) vs perfective (completed) verbs",
     notes:
-      "Most Bulgarian verbs come in pairs sharing a root but differing in aspect: an imperfective form for ongoing/repeated/general action (чета -- \"I read/am reading\") and a perfective form for a single completed action, very often built by adding a prefix (про-, на-, за-...) to the imperfective (прочета -- \"I will read [to completion]\"). This is a property of the verb itself, independent of tense -- an imperfective verb can be past, present, or future, and so can its perfective partner -- which is what makes it distinct from (and more fundamental than) the aorist-vs-imperfect past-tense choice covered at A2. English has nothing directly equivalent; the closest intuition is the difference between \"I was writing a letter\" (process) and \"I wrote the letter\" (completed result), but Bulgarian marks that distinction on the verb itself in every tense, not just the past.",
+      "Most verbs come in pairs sharing a root but differing in aspect: imperfective for ongoing/repeated action (чета), perfective for a single completed action, often built with a prefix (прочета).",
+    example: "Всеки ден чета вестника, но вчера прочетох цялата книга за един час.",
+    exampleTranslation: "Every day I read the newspaper, but yesterday I read (finished) the whole book in one hour.",
+    pitfall:
+      "Aspect is a property of the verb itself, independent of tense -- more fundamental than the aorist-vs-imperfect choice (A2), which is about which past tense to conjugate into.",
     level: "B1",
     drills: [
       { promptBg: "Всеки ден ___ вестника.", promptEn: "Every day I read the newspaper.", correctAnswer: "чета", options: ["чета", "прочета", "четох", "прочетох"] },
@@ -367,8 +503,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Conditional mood",
     description: "бих, би, бихме (would)",
-    notes:
-      "The conditional is built from a special short form of \"to be\" (бих, би, бихме...) historically derived from an old aorist, plus the l-participle -- the same participle form used in perfect and renarrated constructions, so recognizing it here pays off elsewhere. Beyond textbook hypotheticals (\"if I had more time, I would study more\"), бих is also the standard polite way to soften a request or offer, similar to English \"would\" in \"Would you like...\" -- Бих искал кафе reads as noticeably more polite than the blunt Искам кафе.",
+    notes: "The conditional is built from a special short form of \"to be\" (бих, би, бихме) plus the l-participle -- the same participle used in the perfect tense and renarrated mood.",
+    example: "Бих искал кафе, ако имате време.",
+    exampleTranslation: "I would like a coffee, if you have time.",
+    pitfall: "Beyond hypotheticals, бих is the standard polite way to soften a request -- Бих искал кафе reads noticeably more polite than the blunt Искам кафе.",
     level: "B1",
     drills: [
       { promptBg: "___ искал да пътувам повече.", promptEn: "I would like to travel more.", correctAnswer: "Бих", options: ["Бих", "Ще", "Може", "Съм"] },
@@ -380,7 +518,10 @@ const TOPICS: TopicSeed[] = [
     title: "Renarrated mood (intro)",
     description: "marking that you're reporting something secondhand, not witnessed directly -- a distinctive Bulgarian feature",
     notes:
-      "This is one of the genuinely unusual features of Bulgarian grammar, with no real equivalent in English: verb forms built on the l-participle (бил, била, било...) signal that the speaker didn't witness the event directly but is reporting it secondhand, inferring it from evidence, or expressing mild doubt about it -- an evidentiality system, grammatically marking the source of your information the way English would only do with extra words like \"apparently\" or \"I heard that...\". It shows up constantly in storytelling, folk tales, gossip, and news reporting (Той бил много добър студент -- \"He was, so I'm told, a very good student\"), and switching into it mid-conversation can subtly signal skepticism about what's being reported.",
+      "Verb forms built on the l-participle (бил, била, било...) signal the speaker didn't witness the event directly, but is reporting it secondhand or inferring it -- an evidentiality system with no real English equivalent.",
+    example: "Той бил много добър студент, поне така ми казаха.",
+    exampleTranslation: "He was, so I'm told, a very good student.",
+    pitfall: "It shows up constantly in storytelling, gossip, and news reporting, and switching into it mid-conversation can subtly signal skepticism about what's being reported.",
     level: "B1",
     drills: [
       { promptBg: "Той ___ много добър студент, така ми казаха.", promptEn: "He was, I was told, a very good student.", correctAnswer: "бил", options: ["бил", "е", "беше", "бъде"] },
@@ -390,8 +531,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Relative clauses",
     description: "който, която, което, които",
-    notes:
-      "Който and its forms work like English \"who/which/that\", but agree in gender and number with the noun they refer back to (the antecedent), not with anything in the clause they introduce -- момичето, което видях (\"the girl [neuter noun момиче!] that I saw\") stays neuter because it agrees with момичето, even though a girl is naturally feminine. This mismatch between grammatical gender and natural gender is a common trap: always check the antecedent's grammatical gender, not the real-world gender of what it refers to, when picking който vs която vs което.",
+    notes: "Който and its forms work like English \"who/which/that\", but agree in gender and number with the antecedent noun, not with anything in the clause they introduce.",
+    example: "Книгата, която чета, е за момичето, което видях вчера.",
+    exampleTranslation: "The book that I'm reading is about the girl I saw yesterday.",
+    pitfall: "Момичето (\"girl\") is grammatically neuter, so \"the girl I saw\" takes което, not която -- always check the antecedent's grammatical gender, not real-world gender.",
     level: "B1",
     drills: [
       { promptBg: "Момичето, ___ видях вчера, е тук.", promptEn: "The girl I saw yesterday is here.", correctAnswer: "което", options: ["което", "който", "която", "които"] },
@@ -403,8 +546,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Present perfect (съм + participle)",
     description: "чел съм, ходил съм -- an action with present relevance, not just a past narration",
-    notes:
-      "The perfect combines съм (fully conjugating for person, just like in \"to be\") with a past active participle (the -л form) that itself agrees in gender and number with the subject: чел/чела/чело/чели. It's used less for pinpointing when something happened -- that's the aorist's job -- and more for experience or present relevance: Аз съм чел тази книга (\"I have read this book\", relevant to now) reads differently from Аз четох тази книга (\"I read this book\", a plain narrated fact). The participle here is the same building block used by the renarrated mood, so time spent on it pays off twice.",
+    notes: "The perfect combines съм (fully conjugating for person) with a past active participle (the -л form) that agrees in gender/number with the subject: чел/чела/чело/чели.",
+    example: "Аз съм чел тази книга два пъти.",
+    exampleTranslation: "I have read this book twice.",
+    pitfall: "It's used less for pinpointing when something happened -- that's the aorist's job -- and more for experience or present relevance.",
     level: "B1",
     drills: [
       { promptBg: "Аз съм ___ тази книга.", promptEn: "I have read this book.", correctAnswer: "чел", options: ["чел", "чета", "четох", "ще чета"] },
@@ -416,7 +561,10 @@ const TOPICS: TopicSeed[] = [
     title: "Past active participles (-л forms)",
     description: "чел, писал, ходил -- the building block behind the perfect tense and the renarrated mood",
     notes:
-      "Formed by adding -л/-ла/-ло/-ли to a verb's aorist or imperfect stem (depending on the verb), the past active participle isn't a tense by itself -- it's the shared component that the perfect tense (съм + participle) and the renarrated mood (бил + participle) both build on. Learning to form it reliably for a verb, once, pays off in both of those systems rather than being a one-off grammar point.",
+      "Formed by adding -л/-ла/-ло/-ли to a verb's aorist or imperfect stem, the past active participle is the shared building block behind both the perfect tense (съм + participle) and the renarrated mood (бил + participle).",
+    example: "Тя е прочела стотици книги и е написала три романа.",
+    exampleTranslation: "She has read hundreds of books and has written three novels.",
+    pitfall: "Learning to form the participle reliably for a verb pays off in two grammar systems at once, not just one.",
     level: "B1",
     drills: [
       { promptBg: "Тя е много начетена, защото е ___ стотици книги.", promptEn: "She's well-read because she has read hundreds of books.", correctAnswer: "прочела", options: ["прочела", "прочел", "прочело", "прочели"] },
@@ -427,8 +575,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Combining direct & indirect object pronouns",
     description: "дай ми го -- both pronouns together, in fixed order",
-    notes:
-      "When a sentence needs both an indirect object pronoun (to/for whom) and a direct one (what), Bulgarian stacks them in a fixed order -- indirect before direct -- inside the same clitic cluster: Дай ми го (\"Give it to me\", literally \"give to-me it\"), not the reverse. The whole cluster still has to sit in the clause's normal clitic position (right after the first stressed word), same rule as any single short pronoun -- this just extends that rule to two pronouns at once.",
+    notes: "When a sentence needs both an indirect object pronoun (to/for whom) and a direct one (what), Bulgarian stacks them in a fixed order -- indirect before direct -- in the same clitic cluster.",
+    example: "Дай ми го, моля те.",
+    exampleTranslation: "Give it to me, please.",
+    pitfall: "The whole two-pronoun cluster still has to sit in the clause's normal clitic position (right after the first stressed word), same rule as any single short pronoun.",
     level: "B1",
     drills: [
       { promptBg: "Дай ___, моля.", promptEn: "Give it to me, please.", correctAnswer: "ми го", options: ["ми го", "го ми", "ми", "го"] },
@@ -440,7 +590,10 @@ const TOPICS: TopicSeed[] = [
     title: "Prefixed verbs of motion",
     description: "влизам/изляза, отивам/дойда, пристигам -- prefixes marking direction",
     notes:
-      "Bulgarian marks the direction of movement grammatically, the way Russian or German do, rather than lexically the way English does with different words (\"go in\" vs \"come out\" vs \"arrive\"): a base motion root pairs with directional prefixes (в- into, из- out of, при- toward/arriving, за- turning aside...) to specify exactly which way something is moving, and the prefix typically shifts the verb's aspect (imperfective/perfective) at the same time. Learning the prefix inventory once pays off across dozens of individual motion verbs, since the same handful of prefixes recombine with different roots.",
+      "A base motion root pairs with directional prefixes (в- into, из- out of, при- toward/arriving, за- turning aside...) to specify exactly which way something is moving -- Bulgarian marks direction grammatically, the way English uses entirely different words (\"go in\" vs \"come out\").",
+    example: "Той влезе в стаята, а тя излезе от къщата.",
+    exampleTranslation: "He entered the room, and she left the house.",
+    pitfall: "The prefix typically shifts the verb's aspect (imperfective/perfective) at the same time, so the same handful of prefixes recombine meaningfully across dozens of motion verbs.",
     level: "B1",
     drills: [
       { promptBg: "Той ___ в стаята.", promptEn: "He entered the room.", correctAnswer: "влезе", options: ["влезе", "излезе", "отиде", "пристигна"] },
@@ -453,8 +606,11 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Passive voice (basic)",
     description: "е + past passive participle",
-    notes:
-      "The passive is built from съм (е, са...) plus a past passive participle formed with -н or -т (написан -- \"written\", построен -- \"built\"), which itself agrees in gender/number with the subject like an adjective: книгата е написана (feminine) vs романът е написан (masculine). It's noticeably less common in everyday spoken Bulgarian than in English -- Bulgarian tends to prefer an active sentence with an unspecified or reflexive subject instead (Тук се говори английски -- literally \"Here speaks itself English\" -- rather than a true passive \"English is spoken here\"), so recognize the passive more than you'll actively need to produce it.",
+    notes: "The passive is built from съм (е, са) plus a past passive participle formed with -н or -т (написан, построен), which agrees in gender/number with the subject like an adjective.",
+    example: "Книгата е написана от известен автор, а къщата е построена през 1990 година.",
+    exampleTranslation: "The book was written by a famous author, and the house was built in 1990.",
+    pitfall:
+      "It's noticeably less common in spoken Bulgarian than in English -- Bulgarian prefers an active sentence with an unspecified/reflexive subject instead (Тук се говори английски, not a true passive).",
     level: "B2",
     drills: [
       { promptBg: "Книгата ___ от известен автор.", promptEn: "The book was written by a famous author.", correctAnswer: "е написана", options: ["е написана", "пише", "написа", "пишеше"] },
@@ -464,8 +620,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Reported speech (basic)",
     description: "shifting a direct statement into an indirect one",
-    notes:
-      "Reported speech in Bulgarian is friendlier than English's: where English famously \"backshifts\" tense (\"I am tired\" → \"He said he was tired\"), Bulgarian generally keeps the original tense inside the че-clause (Той каза, че е уморен -- literally \"He said that he is tired\", present tense preserved). The real complexity is that Bulgarian has a second, competing way to report speech -- switching the reported verb into the renarrated mood (covered at B1) instead of using че at all -- and the two strategies overlap in meaning but carry different shades of the speaker's certainty about what's being reported.",
+    notes: "Bulgarian is friendlier than English here: rather than \"backshifting\" tense, it keeps the original tense inside the че-clause (Той каза, че е уморен -- \"he said that he is tired\", present preserved).",
+    example: "Тя обясни, че има работа утре.",
+    exampleTranslation: "She explained that she has work tomorrow.",
+    pitfall: "Bulgarian has a second, competing way to report speech -- switching into the renarrated mood instead of using че -- and the two strategies carry different shades of certainty.",
     level: "B2",
     drills: [
       { promptBg: "Той каза, че ___ уморен.", promptEn: "He said that he was tired.", correctAnswer: "е", options: ["е", "съм", "беше", "бил"] },
@@ -475,8 +633,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Advanced connectors",
     description: "въпреки че (although), за да (in order to)",
-    notes:
-      "Въпреки че (\"although/despite the fact that\") and за да (\"in order to\") let you build the longer, more nuanced sentences that separate intermediate from advanced Bulgarian -- concession and purpose, rather than just cause-and-effect (защото/затова from A1). За да is doing the job English splits between \"to\" + infinitive and \"in order to\", but since Bulgarian has no infinitive, it always takes a full да-clause after it (Учих, за да мина изпита -- \"I studied [in order] to pass the exam\"), following the same да-construction pattern already seen with modal verbs.",
+    notes: "Въпреки че (\"although\") and за да (\"in order to\") build the longer, more nuanced sentences that separate intermediate from advanced Bulgarian -- concession and purpose, not just cause-and-effect.",
+    example: "Въпреки че съм зает, ще дойда, за да те видя.",
+    exampleTranslation: "Although I'm busy, I'll come in order to see you.",
+    pitfall: "За да always takes a full да-clause after it, since Bulgarian has no infinitive -- the same да-construction pattern as modal verbs.",
     level: "B2",
     drills: [
       { promptBg: "___ че съм зает, ще дойда.", promptEn: "Although I'm busy, I'll come.", correctAnswer: "Въпреки", options: ["Въпреки", "Защото", "Ако", "Затова"] },
@@ -486,8 +646,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Pluperfect (минало предварително време)",
     description: "бях направил -- an action completed before another past action",
-    notes:
-      "The pluperfect is Bulgarian's \"past of the past\": бях/беше/бяхме + participle, exactly parallel to English \"had done\", used to sequence two past events and make clear which one happened first -- Когато пристигнах, тя вече беше заминала (\"When I arrived, she had already left\") couldn't be expressed with a plain aorist without losing that ordering. It shares the same participle as the present perfect and renarrated mood; only the auxiliary's tense (бях, a past form of съм, instead of present съм) changes.",
+    notes: "Bulgarian's \"past of the past\": бях/беше/бяхме + participle, exactly parallel to English \"had done\", used to sequence two past events and show which one happened first.",
+    example: "Когато пристигнах, тя вече беше заминала.",
+    exampleTranslation: "When I arrived, she had already left.",
+    pitfall: "It shares the same participle as the present perfect and renarrated mood -- only the auxiliary's tense (бях, a past form of съм) changes.",
     level: "B2",
     drills: [
       { promptBg: "Когато се обадих, той вече ___ вечерята.", promptEn: "When I called, he had already eaten dinner.", correctAnswer: "беше изял", options: ["беше изял", "яде", "ще яде", "е ял"] },
@@ -498,8 +660,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Future in the past & future perfect",
     description: "щях да... (would have/was going to), ще съм направил (will have done)",
-    notes:
-      "Щях да + verb describes a plan or intention viewed from a past vantage point -- \"was going to\" -- and very often specifically an unfulfilled one: Щях да дойда, но се разболях (\"I was going to come, but I got sick\") strongly implies it didn't happen. Ще съм + participle is the future perfect, \"will have done [by some future point]\" (До утре ще съм завършил проекта -- \"By tomorrow I'll have finished the project\"), the future-tense counterpart to the pluperfect's past-tense sequencing.",
+    notes: "Щях да + verb describes a plan or intention viewed from a past vantage point -- \"was going to\" -- very often specifically one that didn't happen. Ще съм + participle is the future perfect, \"will have done [by some point]\".",
+    example: "Щях да дойда, но се разболях; до утре ще съм се възстановил.",
+    exampleTranslation: "I was going to come, but I got sick; by tomorrow I will have recovered.",
+    pitfall: "Щях да strongly implies the plan fell through -- it's rarely used for a plan that actually happened.",
     level: "B2",
     drills: [
       { promptBg: "___ да дойда, но се разболях.", promptEn: "I was going to come, but I got sick.", correctAnswer: "Щях", options: ["Щях", "Ще", "Бих", "Щеше"] },
@@ -510,8 +674,10 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Gerund / adverbial participle (деепричастие)",
     description: "четейки -- doing something while doing something else",
-    notes:
-      "Adding -(е)йки to a verb stem builds an adverbial participle describing an action happening at the same time as the main verb -- Четейки вестника, той пиеше кафе (\"While reading the newspaper, he drank coffee\") folds two clauses into one compact sentence. It's mostly a written/literary construction rather than something you'll hear constantly in casual speech, which is exactly the kind of register distinction the next topic covers directly.",
+    notes: "Adding -(е)йки to a verb stem builds an adverbial participle describing an action happening at the same time as the main verb, folding two clauses into one compact sentence.",
+    example: "Четейки вестника, той пиеше кафе.",
+    exampleTranslation: "While reading the newspaper, he drank coffee.",
+    pitfall: "It's mostly a written/literary construction, not something you'll hear constantly in casual speech -- see stylistic register, next.",
     level: "B2",
     drills: [
       { promptBg: "___ вестника, той пиеше кафе.", promptEn: "While reading the newspaper, he drank coffee.", correctAnswer: "Четейки", options: ["Четейки", "Чета", "Четох", "Прочетох"] },
@@ -522,8 +688,11 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Nominalization & complex noun phrases",
     description: "четене, писане -- turning verbs into abstract nouns",
-    notes:
-      "The suffix -не turns a verb into an abstract \"-ing\" noun -- чета → четене (\"reading\"), пиша → писане (\"writing\") -- which formal and written Bulgarian leans on heavily to build dense noun phrases instead of full clauses: след завършването на проекта (\"after the completion of the project\") reads as more official/written than the equivalent full clause след като проектът завърши. Recognizing this pattern matters most for reading official documents, news, and academic text, where nominalized verbs are everywhere.",
+    notes: "The suffix -не turns a verb into an abstract \"-ing\" noun -- чета→четене (\"reading\"), пиша→писане (\"writing\") -- which formal and written Bulgarian leans on to build dense noun phrases instead of full clauses.",
+    example: "Четенето е полезно, а писането отне месец.",
+    exampleTranslation: "Reading is beneficial, and the writing took a month.",
+    pitfall:
+      "След завършването на проекта (\"after the completion of the project\") reads as more official than the equivalent full clause след като проектът завърши -- matters most for reading official/academic text.",
     level: "B2",
     drills: [
       { promptBg: "___ на книгата отне месец.", promptEn: "The writing of the book took a month.", correctAnswer: "Писането", options: ["Писането", "Пиша", "Писах", "Пишех"] },
@@ -534,12 +703,14 @@ const TOPICS: TopicSeed[] = [
   {
     title: "Stylistic register: formal vs. colloquial",
     description: "вие vs ти, official vs everyday word choices",
-    notes:
-      "Вие (formal \"you\", also used for a single person you'd address respectfully -- like French vous) vs. informal ти is the most visible register marker, but the shift runs through vocabulary too: official and bureaucratic Bulgarian favors longer, often Church-Slavonic-derived words (уведомявам -- \"to notify\") where everyday speech reaches for a shorter native one (казвам -- \"to tell\"). There's no single rule for this the way there is for verb conjugation -- it's a skill built mostly from exposure to real forms, news, and conversation, not from a grammar table.",
+    notes: "Вие (formal \"you\", also for one respected person, like French vous) vs. informal ти is the most visible register marker, but the shift runs through vocabulary too.",
+    example: "\"Уведомявам Ви\" е официално; \"казвам ти\" е разговорно.",
+    exampleTranslation: "\"I hereby notify you\" is formal; \"I'm telling you\" is colloquial.",
+    pitfall: "There's no single rule for word-choice register the way there is for verb conjugation -- it's built mostly from exposure to real forms, news, and conversation.",
     level: "B2",
     drills: [
       { promptBg: "На официален бланка пишем ___, а не 'ти'.", promptEn: "On an official form we write 'Vie', not 'ti'.", correctAnswer: "Вие", options: ["Вие", "Ти", "Вас", "Тебе"] },
-      { promptBg: "'Уведомявам Ви, че...' е ___ стил.", promptEn: "'I hereby notify you that...' is a ___ style.", correctAnswer: "официален", options: ["официален", "разговорен", "детски", "поетичен"] },
+      { promptBg: "'Уведомявам Ви, че...' е ___ стил.", promptEn: "This is a ___ style.", correctAnswer: "официален", options: ["официален", "разговорен", "детски", "поетичен"] },
       { promptBg: "'Дай телефона' е по-___ от 'Бихте ли ми дали телефона си'.", promptEn: "'Give me the phone' is more ___ than 'Would you give me your phone'.", correctAnswer: "разговорно", options: ["разговорно", "официално", "старинно", "книжовно"] },
     ],
   },
@@ -557,6 +728,9 @@ async function main() {
         title: topic.title,
         description: topic.description,
         notes: topic.notes,
+        example: topic.example,
+        exampleTranslation: topic.exampleTranslation,
+        pitfall: topic.pitfall,
         level: topic.level,
         position: i + 1,
       })

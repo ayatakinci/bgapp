@@ -1,0 +1,36 @@
+// All 30 letters of the Bulgarian Cyrillic alphabet, in order, with the
+// name used when reciting it (roughly how a Bulgarian schoolchild would
+// say the letter aloud) -- not just the bare letter, since a bare
+// consonant like "б" has no vowel sound of its own to pronounce.
+export const CYRILLIC_ALPHABET: { upper: string; lower: string; name: string }[] = [
+  { upper: "А", lower: "а", name: "а" },
+  { upper: "Б", lower: "б", name: "бъ" },
+  { upper: "В", lower: "в", name: "въ" },
+  { upper: "Г", lower: "г", name: "гъ" },
+  { upper: "Д", lower: "д", name: "дъ" },
+  { upper: "Е", lower: "е", name: "е" },
+  { upper: "Ж", lower: "ж", name: "жъ" },
+  { upper: "З", lower: "з", name: "зъ" },
+  { upper: "И", lower: "и", name: "и" },
+  { upper: "Й", lower: "й", name: "и кратко" },
+  { upper: "К", lower: "к", name: "къ" },
+  { upper: "Л", lower: "л", name: "лъ" },
+  { upper: "М", lower: "м", name: "мъ" },
+  { upper: "Н", lower: "н", name: "нъ" },
+  { upper: "О", lower: "о", name: "о" },
+  { upper: "П", lower: "п", name: "пъ" },
+  { upper: "Р", lower: "р", name: "ръ" },
+  { upper: "С", lower: "с", name: "съ" },
+  { upper: "Т", lower: "т", name: "тъ" },
+  { upper: "У", lower: "у", name: "у" },
+  { upper: "Ф", lower: "ф", name: "фъ" },
+  { upper: "Х", lower: "х", name: "хъ" },
+  { upper: "Ц", lower: "ц", name: "цъ" },
+  { upper: "Ч", lower: "ч", name: "чъ" },
+  { upper: "Ш", lower: "ш", name: "шъ" },
+  { upper: "Щ", lower: "щ", name: "щъ" },
+  { upper: "Ъ", lower: "ъ", name: "ер голям" },
+  { upper: "Ь", lower: "ь", name: "ер малък" },
+  { upper: "Ю", lower: "ю", name: "ю" },
+  { upper: "Я", lower: "я", name: "я" },
+];

@@ -31,10 +31,15 @@ function findBulgarianVoice(): SpeechSynthesisVoice | undefined {
 }
 
 // null = voice list not loaded yet, so we don't know; true/false once we do.
+// Always starts at null and only ever changes inside useEffect (which runs
+// after hydration, never during render) -- reading the module-level
+// voicesCache directly in useState's initializer would make the very first
+// client render disagree with the server's, since that cache can already
+// be populated by the time this component mounts (voice lists frequently
+// resolve synchronously for local OS voices), while the server -- with no
+// window -- always renders as if nothing is known yet.
 export function useHasBulgarianVoice(): boolean | null {
-  const [hasVoice, setHasVoice] = useState<boolean | null>(() =>
-    voicesCache.length > 0 ? Boolean(findBulgarianVoice()) : null
-  );
+  const [hasVoice, setHasVoice] = useState<boolean | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined" || !window.speechSynthesis) return;

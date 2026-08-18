@@ -400,6 +400,54 @@ const TOPICS: TopicSeed[] = [
       { promptBg: "Хората, ___ познавам, са мили.", promptEn: "The people whom I know are nice.", correctAnswer: "които", options: ["които", "който", "която", "което"] },
     ],
   },
+  {
+    title: "Present perfect (съм + participle)",
+    description: "чел съм, ходил съм -- an action with present relevance, not just a past narration",
+    notes:
+      "The perfect combines съм (fully conjugating for person, just like in \"to be\") with a past active participle (the -л form) that itself agrees in gender and number with the subject: чел/чела/чело/чели. It's used less for pinpointing when something happened -- that's the aorist's job -- and more for experience or present relevance: Аз съм чел тази книга (\"I have read this book\", relevant to now) reads differently from Аз четох тази книга (\"I read this book\", a plain narrated fact). The participle here is the same building block used by the renarrated mood, so time spent on it pays off twice.",
+    level: "B1",
+    drills: [
+      { promptBg: "Аз съм ___ тази книга.", promptEn: "I have read this book.", correctAnswer: "чел", options: ["чел", "чета", "четох", "ще чета"] },
+      { promptBg: "Ние сме ___ в България.", promptEn: "We have been to Bulgaria.", correctAnswer: "били", options: ["били", "сме", "бяхме", "бъдем"] },
+      { promptBg: "Той е ___ писмото.", promptEn: "He has written the letter.", correctAnswer: "написал", options: ["написал", "пиша", "написах", "пишех"] },
+    ],
+  },
+  {
+    title: "Past active participles (-л forms)",
+    description: "чел, писал, ходил -- the building block behind the perfect tense and the renarrated mood",
+    notes:
+      "Formed by adding -л/-ла/-ло/-ли to a verb's aorist or imperfect stem (depending on the verb), the past active participle isn't a tense by itself -- it's the shared component that the perfect tense (съм + participle) and the renarrated mood (бил + participle) both build on. Learning to form it reliably for a verb, once, pays off in both of those systems rather than being a one-off grammar point.",
+    level: "B1",
+    drills: [
+      { promptBg: "Тя е много начетена, защото е ___ стотици книги.", promptEn: "She's well-read because she has read hundreds of books.", correctAnswer: "прочела", options: ["прочела", "прочел", "прочело", "прочели"] },
+      { promptBg: "Момчетата са ___ цял ден.", promptEn: "The boys have played all day.", correctAnswer: "играли", options: ["играли", "играл", "играла", "играло"] },
+      { promptBg: "Учителката е ___ урока добре.", promptEn: "The [female] teacher has explained the lesson well.", correctAnswer: "обяснила", options: ["обяснила", "обяснил", "обяснило", "обяснили"] },
+    ],
+  },
+  {
+    title: "Combining direct & indirect object pronouns",
+    description: "дай ми го -- both pronouns together, in fixed order",
+    notes:
+      "When a sentence needs both an indirect object pronoun (to/for whom) and a direct one (what), Bulgarian stacks them in a fixed order -- indirect before direct -- inside the same clitic cluster: Дай ми го (\"Give it to me\", literally \"give to-me it\"), not the reverse. The whole cluster still has to sit in the clause's normal clitic position (right after the first stressed word), same rule as any single short pronoun -- this just extends that rule to two pronouns at once.",
+    level: "B1",
+    drills: [
+      { promptBg: "Дай ___, моля.", promptEn: "Give it to me, please.", correctAnswer: "ми го", options: ["ми го", "го ми", "ми", "го"] },
+      { promptBg: "Той ___ показа.", promptEn: "He showed it to me.", correctAnswer: "ми я", options: ["ми я", "я ми", "ми", "я"] },
+      { promptBg: "Тя ___ разказа историята.", promptEn: "She told it (the story) to us.", correctAnswer: "ни я", options: ["ни я", "я ни", "ни", "я"] },
+    ],
+  },
+  {
+    title: "Prefixed verbs of motion",
+    description: "влизам/изляза, отивам/дойда, пристигам -- prefixes marking direction",
+    notes:
+      "Bulgarian marks the direction of movement grammatically, the way Russian or German do, rather than lexically the way English does with different words (\"go in\" vs \"come out\" vs \"arrive\"): a base motion root pairs with directional prefixes (в- into, из- out of, при- toward/arriving, за- turning aside...) to specify exactly which way something is moving, and the prefix typically shifts the verb's aspect (imperfective/perfective) at the same time. Learning the prefix inventory once pays off across dozens of individual motion verbs, since the same handful of prefixes recombine with different roots.",
+    level: "B1",
+    drills: [
+      { promptBg: "Той ___ в стаята.", promptEn: "He entered the room.", correctAnswer: "влезе", options: ["влезе", "излезе", "отиде", "пристигна"] },
+      { promptBg: "Тя ___ от къщата.", promptEn: "She left the house.", correctAnswer: "излезе", options: ["излезе", "влезе", "дойде", "замина"] },
+      { promptBg: "Влакът ___ навреме.", promptEn: "The train arrived on time.", correctAnswer: "пристигна", options: ["пристигна", "замина", "влезе", "излезе"] },
+    ],
+  },
 
   // ---------- B2 ----------
   {
@@ -433,6 +481,66 @@ const TOPICS: TopicSeed[] = [
     drills: [
       { promptBg: "___ че съм зает, ще дойда.", promptEn: "Although I'm busy, I'll come.", correctAnswer: "Въпреки", options: ["Въпреки", "Защото", "Ако", "Затова"] },
       { promptBg: "Учих цяла нощ, ___ да мина изпита.", promptEn: "I studied all night in order to pass the exam.", correctAnswer: "за", options: ["за", "но", "и", "затова"] },
+    ],
+  },
+  {
+    title: "Pluperfect (минало предварително време)",
+    description: "бях направил -- an action completed before another past action",
+    notes:
+      "The pluperfect is Bulgarian's \"past of the past\": бях/беше/бяхме + participle, exactly parallel to English \"had done\", used to sequence two past events and make clear which one happened first -- Когато пристигнах, тя вече беше заминала (\"When I arrived, she had already left\") couldn't be expressed with a plain aorist without losing that ordering. It shares the same participle as the present perfect and renarrated mood; only the auxiliary's tense (бях, a past form of съм, instead of present съм) changes.",
+    level: "B2",
+    drills: [
+      { promptBg: "Когато се обадих, той вече ___ вечерята.", promptEn: "When I called, he had already eaten dinner.", correctAnswer: "беше изял", options: ["беше изял", "яде", "ще яде", "е ял"] },
+      { promptBg: "Ние ___ преди да завали дъжд.", promptEn: "We had left before it started raining.", correctAnswer: "бяхме тръгнали", options: ["бяхме тръгнали", "тръгнахме", "тръгваме", "ще тръгнем"] },
+      { promptBg: "Тя ___ писмото предния ден, преди да замина.", promptEn: "She had written the letter the day before, before I left.", correctAnswer: "беше написала", options: ["беше написала", "написа", "пише", "е написала"] },
+    ],
+  },
+  {
+    title: "Future in the past & future perfect",
+    description: "щях да... (would have/was going to), ще съм направил (will have done)",
+    notes:
+      "Щях да + verb describes a plan or intention viewed from a past vantage point -- \"was going to\" -- and very often specifically an unfulfilled one: Щях да дойда, но се разболях (\"I was going to come, but I got sick\") strongly implies it didn't happen. Ще съм + participle is the future perfect, \"will have done [by some future point]\" (До утре ще съм завършил проекта -- \"By tomorrow I'll have finished the project\"), the future-tense counterpart to the pluperfect's past-tense sequencing.",
+    level: "B2",
+    drills: [
+      { promptBg: "___ да дойда, но се разболях.", promptEn: "I was going to come, but I got sick.", correctAnswer: "Щях", options: ["Щях", "Ще", "Бих", "Щеше"] },
+      { promptBg: "До утре ___ завършил проекта.", promptEn: "By tomorrow I will have finished the project.", correctAnswer: "ще съм", options: ["ще съм", "съм", "бях", "ще бъда"] },
+      { promptBg: "Тя ___ да ми се обади, но забрави.", promptEn: "She was going to call me, but forgot.", correctAnswer: "щеше", options: ["щеше", "ще", "беше", "би"] },
+    ],
+  },
+  {
+    title: "Gerund / adverbial participle (деепричастие)",
+    description: "четейки -- doing something while doing something else",
+    notes:
+      "Adding -(е)йки to a verb stem builds an adverbial participle describing an action happening at the same time as the main verb -- Четейки вестника, той пиеше кафе (\"While reading the newspaper, he drank coffee\") folds two clauses into one compact sentence. It's mostly a written/literary construction rather than something you'll hear constantly in casual speech, which is exactly the kind of register distinction the next topic covers directly.",
+    level: "B2",
+    drills: [
+      { promptBg: "___ вестника, той пиеше кафе.", promptEn: "While reading the newspaper, he drank coffee.", correctAnswer: "Четейки", options: ["Четейки", "Чета", "Четох", "Прочетох"] },
+      { promptBg: "___ по улицата, тя срещна приятелка.", promptEn: "While walking down the street, she met a friend.", correctAnswer: "Вървейки", options: ["Вървейки", "Върви", "Вървя", "Вървях"] },
+      { promptBg: "___ вратата, той извика.", promptEn: "While opening the door, he shouted.", correctAnswer: "Отваряйки", options: ["Отваряйки", "Отвори", "Отварям", "Отворих"] },
+    ],
+  },
+  {
+    title: "Nominalization & complex noun phrases",
+    description: "четене, писане -- turning verbs into abstract nouns",
+    notes:
+      "The suffix -не turns a verb into an abstract \"-ing\" noun -- чета → четене (\"reading\"), пиша → писане (\"writing\") -- which formal and written Bulgarian leans on heavily to build dense noun phrases instead of full clauses: след завършването на проекта (\"after the completion of the project\") reads as more official/written than the equivalent full clause след като проектът завърши. Recognizing this pattern matters most for reading official documents, news, and academic text, where nominalized verbs are everywhere.",
+    level: "B2",
+    drills: [
+      { promptBg: "___ на книгата отне месец.", promptEn: "The writing of the book took a month.", correctAnswer: "Писането", options: ["Писането", "Пиша", "Писах", "Пишех"] },
+      { promptBg: "___ е полезно за здравето.", promptEn: "Reading is good for your health.", correctAnswer: "Четенето", options: ["Четенето", "Чета", "Прочетох", "Четях"] },
+      { promptBg: "След ___ на проекта, всички си починаха.", promptEn: "After the completion of the project, everyone rested.", correctAnswer: "завършването", options: ["завършването", "завърших", "завършвам", "завърша"] },
+    ],
+  },
+  {
+    title: "Stylistic register: formal vs. colloquial",
+    description: "вие vs ти, official vs everyday word choices",
+    notes:
+      "Вие (formal \"you\", also used for a single person you'd address respectfully -- like French vous) vs. informal ти is the most visible register marker, but the shift runs through vocabulary too: official and bureaucratic Bulgarian favors longer, often Church-Slavonic-derived words (уведомявам -- \"to notify\") where everyday speech reaches for a shorter native one (казвам -- \"to tell\"). There's no single rule for this the way there is for verb conjugation -- it's a skill built mostly from exposure to real forms, news, and conversation, not from a grammar table.",
+    level: "B2",
+    drills: [
+      { promptBg: "На официален бланка пишем ___, а не 'ти'.", promptEn: "On an official form we write 'Vie', not 'ti'.", correctAnswer: "Вие", options: ["Вие", "Ти", "Вас", "Тебе"] },
+      { promptBg: "'Уведомявам Ви, че...' е ___ стил.", promptEn: "'I hereby notify you that...' is a ___ style.", correctAnswer: "официален", options: ["официален", "разговорен", "детски", "поетичен"] },
+      { promptBg: "'Дай телефона' е по-___ от 'Бихте ли ми дали телефона си'.", promptEn: "'Give me the phone' is more ___ than 'Would you give me your phone'.", correctAnswer: "разговорно", options: ["разговорно", "официално", "старинно", "книжовно"] },
     ],
   },
 ];

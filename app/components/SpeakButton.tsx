@@ -70,10 +70,28 @@ export function speak(text: string, rate = 1) {
   synth.cancel(); // stop whatever was already playing
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.lang = "bg-BG";
   utterance.rate = rate;
+
   const bgVoice = findBulgarianVoice();
-  if (bgVoice) utterance.voice = bgVoice;
+  if (bgVoice) {
+    utterance.voice = bgVoice;
+    utterance.lang = bgVoice.lang;
+  } else {
+    // On Windows/Chromium in particular, asking for a lang (bg-BG) with no
+    // matching installed voice and leaving `voice` unset can make the
+    // underlying SAPI engine silently produce nothing at all -- it still
+    // fires onstart/onend as if it worked, so this fails with zero errors
+    // and zero sound. Explicitly picking a real installed voice (matching
+    // its own lang, not the requested one) keeps voice+lang internally
+    // consistent so the engine actually has something to say.
+    const fallback = voicesCache.find((v) => v.default) ?? voicesCache[0];
+    if (fallback) {
+      utterance.voice = fallback;
+      utterance.lang = fallback.lang;
+    } else {
+      utterance.lang = "bg-BG";
+    }
+  }
 
   // Chrome has a known race condition where speak() called in the same
   // tick right after cancel() can be silently dropped.

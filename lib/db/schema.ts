@@ -13,6 +13,9 @@ export const lessons = pgTable("lessons", {
   id: serial("id").primaryKey(),
   title: text("title").notNull(),
   description: text("description"),
+  // Where this lesson sits in the overall CEFR progression -- same scale
+  // as grammarTopics.level, so /curriculum can interleave the two.
+  level: text("level").notNull().default("A1"), // "A1" | "A2" | "B1" | "B2"
   position: integer("position").notNull().unique(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
 });

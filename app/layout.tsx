@@ -38,6 +38,9 @@ export default async function RootLayout({
             <Link href="/" className="text-lg font-semibold tracking-tight">
               bgapp
             </Link>
+            <Link href="/curriculum" className="text-sm font-medium text-stone-900 hover:underline">
+              Curriculum
+            </Link>
             <Link href="/lessons" className="text-sm text-stone-600 hover:text-stone-900">
               Lessons
             </Link>

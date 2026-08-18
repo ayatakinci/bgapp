@@ -1,12 +1,16 @@
 // The full A1->B2 syllabus, as given -- kept separate from grammarTopics/
 // lessons because it's reference/overview content (can-do statements,
-// vocabulary blurbs, milestones), not a drillable unit. `topic` links a
-// grammar line to a real grammar_topics.title where one exists, so the
-// syllabus becomes a navigable checklist instead of static text.
+// vocabulary blurbs, milestones), not a drillable unit. `topics` links a
+// grammar line to real grammar_topics.title values where they exist, so
+// the syllabus becomes a navigable checklist instead of static text.
+//
+// Each grammar item's `id` is a stable key used for per-user progress
+// tracking (syllabus_progress.item_id) -- it must never change once a
+// user could have checked it, or their progress silently resets.
 
 export type SyllabusGrammarItem = {
+  id: string;
   text: string;
-  done: boolean;
   topics?: string[]; // grammar_topics.title values this line covers
 };
 
@@ -27,21 +31,21 @@ export const SYLLABUS: LevelSyllabus[] = [
     name: "Survival",
     emoji: "🟢",
     grammar: [
-      { text: "Cyrillic alphabet — all 30 letters, reading automatic", done: true },
-      { text: "Personal pronouns (аз, ти, той…)", done: true },
-      { text: "съм (to be) — present tense", done: true, topics: ['"To be" (съм)'] },
-      { text: "Present tense of regular verbs — the three conjugation groups (-а, -и, -е endings)", done: true, topics: ["Present tense verb endings"] },
-      { text: "Gender of nouns (masculine / feminine / neuter)", done: true },
-      { text: "Plurals — basic patterns", done: true, topics: ["Plurals"] },
-      { text: "Definite article (\"the\" as a tail: -ът/-та/-то/-те)", done: true, topics: ["Definite article"] },
-      { text: "Numbers 0–100 + the masculine counting form (два лева)", done: true },
-      { text: "Negation with не", done: true, topics: ["Negation"] },
-      { text: "Yes/no questions with ли; basic question words (какво, къде, кой)", done: true, topics: ["Yes/no questions (ли)", "Question words"] },
-      { text: "Telling time + days of the week", done: true },
-      { text: "Adjective agreement (голям / голяма / голямо / големи)", done: false, topics: ["Adjectives and agreement"] },
-      { text: "Demonstratives — този / тази / това / тези (this/these)", done: false, topics: ["This / that"] },
-      { text: "Basic prepositions — в, на, от, с, за", done: false, topics: ["Prepositions"] },
-      { text: "\"There is / there are\" — има / няма", done: false, topics: ['"Има / няма"'] },
+      { id: "a1-alphabet", text: "Cyrillic alphabet — all 30 letters, reading automatic", topics: ["Cyrillic alphabet"] },
+      { id: "a1-pronouns", text: "Personal pronouns (аз, ти, той…)", topics: ["Personal pronouns"] },
+      { id: "a1-sum", text: "съм (to be) — present tense", topics: ['"To be" (съм)'] },
+      { id: "a1-present-tense", text: "Present tense of regular verbs — the three conjugation groups (-а, -и, -е endings)", topics: ["Present tense verb endings"] },
+      { id: "a1-gender", text: "Gender of nouns (masculine / feminine / neuter)" },
+      { id: "a1-plurals", text: "Plurals — basic patterns", topics: ["Plurals"] },
+      { id: "a1-definite-article", text: "Definite article (\"the\" as a tail: -ът/-та/-то/-те)", topics: ["Definite article"] },
+      { id: "a1-numbers", text: "Numbers 0–100 + the masculine counting form (два лева)" },
+      { id: "a1-negation", text: "Negation with не", topics: ["Negation"] },
+      { id: "a1-questions", text: "Yes/no questions with ли; basic question words (какво, къде, кой)", topics: ["Yes/no questions (ли)", "Question words"] },
+      { id: "a1-time-days", text: "Telling time + days of the week" },
+      { id: "a1-adjectives", text: "Adjective agreement (голям / голяма / голямо / големи)", topics: ["Adjectives and agreement"] },
+      { id: "a1-demonstratives", text: "Demonstratives — този / тази / това / тези (this/these)", topics: ["This / that"] },
+      { id: "a1-prepositions", text: "Basic prepositions — в, на, от, с, за", topics: ["Prepositions"] },
+      { id: "a1-there-is", text: "\"There is / there are\" — има / няма", topics: ['"Има / няма"'] },
     ],
     canDo: [
       "Greet, say goodbye, be polite",
@@ -62,22 +66,22 @@ export const SYLLABUS: LevelSyllabus[] = [
     emoji: "🟡",
     grammar: [
       {
+        id: "a2-possessives",
         text: "Possessive pronouns — long (мой, твой, негов, неин, наш, ваш, техен) + short/clitic (ми, ти, му, ѝ, ни, ви, им): \"колата ми\" = my car",
-        done: false,
         topics: ["Possession"],
       },
-      { text: "Full vs. short definite article for masculine (столът / стола) — the writing rule", done: false, topics: ["Definite article"] },
-      { text: "Modal verbs — мога (can), трябва (must/need), искам да (want to), може (may)", done: false, topics: ["Modal verbs"] },
-      { text: "The да-construction (Bulgarian's \"subjunctive\" — replaces the infinitive): искам да ям", done: false, topics: ["Modal verbs"] },
-      { text: "Dative \"experiencer\" constructions — харесва ми (I like), боли ме (it hurts me), студено ми е (I'm cold)", done: false, topics: ['"I like"'] },
-      { text: "Future tense — ще + verb; negative future няма да", done: false, topics: ["Future tense"] },
-      { text: "Past simple / Aorist (минало свършено време) — \"I did/said/ate\": говорих, ядох, отидох", done: false, topics: ["Past tense (basic)"] },
-      { text: "Introduction to verbal aspect — perfective vs. imperfective pairs (пиша / напиша)", done: false, topics: ["Verbal aspect (intro)"] },
-      { text: "Imperative — commands (кажи! чакай! елате!)", done: false, topics: ["Imperative (basic)"] },
-      { text: "Comparative & superlative — по- (more) / най- (most): по-голям, най-добър", done: false, topics: ["Comparison of adjectives"] },
-      { text: "Reflexive verbs with се (казвам се, намира се, чувствам се)", done: false, topics: ["Reflexive verbs"] },
-      { text: "More prepositions — до, при, под, над, между, през, без", done: false, topics: ["Prepositions of time"] },
-      { text: "Adverbs of frequency & manner (винаги, често, понякога, бавно, бързо)", done: false, topics: ["Adverbs"] },
+      { id: "a2-definite-article-full", text: "Full vs. short definite article for masculine (столът / стола) — the writing rule", topics: ["Definite article"] },
+      { id: "a2-modals", text: "Modal verbs — мога (can), трябва (must/need), искам да (want to), може (may)", topics: ["Modal verbs"] },
+      { id: "a2-da-construction", text: "The да-construction (Bulgarian's \"subjunctive\" — replaces the infinitive): искам да ям", topics: ["Modal verbs"] },
+      { id: "a2-dative-experiencer", text: "Dative \"experiencer\" constructions — харесва ми (I like), боли ме (it hurts me), студено ми е (I'm cold)", topics: ['"I like"'] },
+      { id: "a2-future", text: "Future tense — ще + verb; negative future няма да", topics: ["Future tense"] },
+      { id: "a2-aorist", text: "Past simple / Aorist (минало свършено време) — \"I did/said/ate\": говорих, ядох, отидох", topics: ["Past tense (basic)"] },
+      { id: "a2-aspect-intro", text: "Introduction to verbal aspect — perfective vs. imperfective pairs (пиша / напиша)", topics: ["Verbal aspect (intro)"] },
+      { id: "a2-imperative", text: "Imperative — commands (кажи! чакай! елате!)", topics: ["Imperative (basic)"] },
+      { id: "a2-comparison", text: "Comparative & superlative — по- (more) / най- (most): по-голям, най-добър", topics: ["Comparison of adjectives"] },
+      { id: "a2-reflexive", text: "Reflexive verbs with се (казвам се, намира се, чувствам се)", topics: ["Reflexive verbs"] },
+      { id: "a2-more-prepositions", text: "More prepositions — до, при, под, над, между, през, без", topics: ["Prepositions of time"] },
+      { id: "a2-adverbs", text: "Adverbs of frequency & manner (винаги, често, понякога, бавно, бързо)", topics: ["Adverbs"] },
     ],
     canDo: [
       "Describe people, places, and things in simple terms",
@@ -100,30 +104,30 @@ export const SYLLABUS: LevelSyllabus[] = [
     name: "Independent",
     emoji: "🟠",
     grammar: [
-      { text: "Verbal aspect in depth — choosing perfective vs. imperfective correctly (the big Slavic skill)", done: false, topics: ["Verbal aspect (intro)"] },
-      { text: "Imperfect past (минало несвършено време) — \"I was doing / used to do\": четях, работех", done: false, topics: ["Aorist vs imperfect"] },
-      { text: "Aorist vs. Imperfect — knowing which past tense to use", done: false, topics: ["Aorist vs imperfect"] },
+      { id: "b1-aspect-depth", text: "Verbal aspect in depth — choosing perfective vs. imperfective correctly (the big Slavic skill)", topics: ["Verbal aspect (intro)"] },
+      { id: "b1-imperfect", text: "Imperfect past (минало несвършено време) — \"I was doing / used to do\": четях, работех", topics: ["Aorist vs imperfect"] },
+      { id: "b1-aorist-vs-imperfect", text: "Aorist vs. Imperfect — knowing which past tense to use", topics: ["Aorist vs imperfect"] },
       {
+        id: "b1-present-perfect",
         text: "Present perfect (минало неопределено — съм + past participle): чел съм, ходил съм (\"I have read/been\")",
-        done: false,
         topics: ["Present perfect (съм + participle)"],
       },
-      { text: "Past active participles (чел, писал) — forming and using them", done: false, topics: ["Past active participles (-л forms)"] },
-      { text: "Relative clauses — който / която / което / които (the man who…, the book that…)", done: false, topics: ["Relative clauses"] },
-      { text: "Conditional — бих + past participle: бих искал (I would like)", done: false, topics: ["Conditional mood"] },
-      { text: "Conditional sentences with ако (if) + future/past", done: false, topics: ['"Ако" (if) clauses'] },
-      { text: "Clitic (short-pronoun) ordering rules & word order in the sentence", done: false, topics: ["Long vs short object pronouns"] },
+      { id: "b1-participles", text: "Past active participles (чел, писал) — forming and using them", topics: ["Past active participles (-л forms)"] },
+      { id: "b1-relative-clauses", text: "Relative clauses — който / която / което / които (the man who…, the book that…)", topics: ["Relative clauses"] },
+      { id: "b1-conditional", text: "Conditional — бих + past participle: бих искал (I would like)", topics: ["Conditional mood"] },
+      { id: "b1-ako-clauses", text: "Conditional sentences with ако (if) + future/past", topics: ['"Ако" (if) clauses'] },
+      { id: "b1-clitic-ordering", text: "Clitic (short-pronoun) ordering rules & word order in the sentence", topics: ["Long vs short object pronouns"] },
       {
+        id: "b1-object-pronouns-combo",
         text: "Direct & indirect object pronouns together (Give it to me = дай ми го)",
-        done: false,
         topics: ["Combining direct & indirect object pronouns"],
       },
-      { text: "Passive voice basics — with се and with participles", done: false, topics: ["Passive voice (basic)"] },
-      { text: "Purpose, cause, result clauses — за да, защото, затова, така че", done: false, topics: ["Advanced connectors", "Connecting sentences"] },
-      { text: "Reported/indirect speech basics (\"He said that…\")", done: false, topics: ["Reported speech (basic)"] },
+      { id: "b1-passive-intro", text: "Passive voice basics — with се and with participles", topics: ["Passive voice (basic)"] },
+      { id: "b1-purpose-clauses", text: "Purpose, cause, result clauses — за да, защото, затова, така че", topics: ["Advanced connectors", "Connecting sentences"] },
+      { id: "b1-reported-speech-basic", text: "Reported/indirect speech basics (\"He said that…\")", topics: ["Reported speech (basic)"] },
       {
+        id: "b1-motion-verbs",
         text: "Prefixed verbs of motion (влизам, излизам, отивам, пристигам…)",
-        done: false,
         topics: ["Prefixed verbs of motion"],
       },
     ],
@@ -148,37 +152,37 @@ export const SYLLABUS: LevelSyllabus[] = [
     emoji: "🔴",
     grammar: [
       {
+        id: "b2-renarrative",
         text: "Renarrative mood (преизказно наклонение) — Bulgarian's famous \"reported/hearsay\" verb forms: той бил, казал, отишъл (\"he apparently went / they say he…\"). Distinctive, essential, and hard.",
-        done: false,
         topics: ["Renarrated mood (intro)"],
       },
-      { text: "Pluperfect (минало предварително време) — \"I had done\"", done: false, topics: ["Pluperfect (минало предварително време)"] },
+      { id: "b2-pluperfect", text: "Pluperfect (минало предварително време) — \"I had done\"", topics: ["Pluperfect (минало предварително време)"] },
       {
+        id: "b2-future-past",
         text: "Future in the past & future perfect (щях да…, ще съм направил)",
-        done: false,
         topics: ["Future in the past & future perfect"],
       },
-      { text: "Full command of verbal aspect across all tenses and moods", done: false, topics: ["Verbal aspect (intro)"] },
-      { text: "Present & past passive participles + full passive voice (написан, направен)", done: false, topics: ["Passive voice (basic)"] },
+      { id: "b2-aspect-full", text: "Full command of verbal aspect across all tenses and moods", topics: ["Verbal aspect (intro)"] },
+      { id: "b2-passive-full", text: "Present & past passive participles + full passive voice (написан, направен)", topics: ["Passive voice (basic)"] },
       {
+        id: "b2-gerund",
         text: "Gerund / adverbial participle (деепричастие): четейки (while reading)",
-        done: false,
         topics: ["Gerund / adverbial participle (деепричастие)"],
       },
-      { text: "Complex conditional & hypothetical sentences (mixed real/unreal)", done: false, topics: ["Conditional mood"] },
-      { text: "Nuanced reported speech + sequence of tenses", done: false, topics: ["Reported speech (basic)"] },
-      { text: "Advanced clitic clusters and emphatic/marked word order", done: false, topics: ["Combining direct & indirect object pronouns"] },
+      { id: "b2-conditional-complex", text: "Complex conditional & hypothetical sentences (mixed real/unreal)", topics: ["Conditional mood"] },
+      { id: "b2-reported-speech-nuanced", text: "Nuanced reported speech + sequence of tenses", topics: ["Reported speech (basic)"] },
+      { id: "b2-clitic-advanced", text: "Advanced clitic clusters and emphatic/marked word order", topics: ["Combining direct & indirect object pronouns"] },
       {
+        id: "b2-nominalization",
         text: "Nominalization and complex noun phrases",
-        done: false,
         topics: ["Nominalization & complex noun phrases"],
       },
       {
+        id: "b2-register",
         text: "Stylistic register — formal vs. colloquial vs. written Bulgarian",
-        done: false,
         topics: ["Stylistic register: formal vs. colloquial"],
       },
-      { text: "Fine-grained conjunctions & discourse markers (все пак, макар че, въпреки че, следователно)", done: false, topics: ["Advanced connectors"] },
+      { id: "b2-connectors", text: "Fine-grained conjunctions & discourse markers (все пак, макар че, въпреки че, следователно)", topics: ["Advanced connectors"] },
     ],
     canDo: [
       "Interact with fluency and spontaneity, including with native speakers",
@@ -222,4 +226,19 @@ export const DISTINCTIVE_FEATURES: { title: string; body: string }[] = [
     title: "Clitic word-order rules",
     body: "The little pronouns (ми, го, се, ли, ще) follow strict placement rules. A B1 focus.",
   },
+];
+
+export const MOTIVATIONAL_MESSAGES: string[] = [
+  "Nice work — that's one more piece of the puzzle in place.",
+  "Keep going, you're building real momentum.",
+  "That's exactly how fluency gets built: one topic at a time.",
+  "Solid. Your future self will thank you for this one.",
+  "Progress, not perfection — and that's progress.",
+  "One step closer to speaking Bulgarian without translating in your head.",
+  "You'll be surprised how often that one comes up in real conversation.",
+  "That's a genuinely tricky one for English speakers — well done.",
+  "Every checkbox is a sentence you'll understand later that you wouldn't have before.",
+  "Great pace. Consistency beats intensity here.",
+  "Now go find it in a real sentence somewhere and notice it.",
+  "That's the kind of detail that separates textbook Bulgarian from real Bulgarian.",
 ];

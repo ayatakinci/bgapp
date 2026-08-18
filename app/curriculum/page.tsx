@@ -2,13 +2,19 @@ import Link from "next/link";
 import { db } from "@/lib/db";
 import { grammarTopics, lessons } from "@/lib/db/schema";
 import { SYLLABUS, DISTINCTIVE_FEATURES } from "@/lib/syllabus";
+import { getSession } from "@/lib/auth/dal";
+import { getSyllabusProgress } from "@/lib/db/syllabus-progress";
+import { SyllabusChecklist } from "@/app/components/SyllabusChecklist";
 
 export const dynamic = "force-dynamic";
 
 export default async function CurriculumPage() {
-  const [allGrammar, allLessons] = await Promise.all([
+  const session = await getSession();
+
+  const [allGrammar, allLessons, checkedItems] = await Promise.all([
     db.select({ id: grammarTopics.id, title: grammarTopics.title }).from(grammarTopics),
     db.select({ id: lessons.id, title: lessons.title, level: lessons.level, position: lessons.position }).from(lessons).orderBy(lessons.position),
+    session ? getSyllabusProgress(session.userId) : Promise.resolve(new Set<string>()),
   ]);
   const grammarIdByTitle = new Map(allGrammar.map((g) => [g.title, g.id]));
 
@@ -18,12 +24,20 @@ export default async function CurriculumPage() {
       <p className="mb-8 text-sm text-stone-500">
         The complete map from zero to confident, independent Bulgarian. Work through it level by level --
         every grammar point links to a practice topic where one exists on this site; vocabulary categories
-        link to lessons.
+        link to lessons. Check items off as you study them to track your progress.
       </p>
 
       <div className="flex flex-col gap-14">
         {SYLLABUS.map((lvl) => {
           const lessonsForLevel = allLessons.filter((l) => l.level === lvl.level);
+          const items = lvl.grammar.map((item) => ({
+            id: item.id,
+            text: item.text,
+            links: (item.topics ?? [])
+              .map((t) => ({ title: t, id: grammarIdByTitle.get(t) }))
+              .filter((t): t is { title: string; id: number } => t.id !== undefined),
+          }));
+          const initialChecked = items.map((i) => i.id).filter((id) => checkedItems.has(id));
 
           return (
             <section key={lvl.level}>
@@ -40,36 +54,7 @@ export default async function CurriculumPage() {
                   <h3 className="mb-2 text-xs font-medium uppercase tracking-wide text-stone-400">
                     Grammar
                   </h3>
-                  <ul className="flex flex-col gap-1.5">
-                    {lvl.grammar.map((item) => {
-                      const links = (item.topics ?? [])
-                        .map((t) => ({ title: t, id: grammarIdByTitle.get(t) }))
-                        .filter((t): t is { title: string; id: number } => t.id !== undefined);
-                      return (
-                        <li key={item.text} className="flex items-start gap-2 text-sm">
-                          <span className={item.done ? "text-emerald-600" : "text-stone-300"}>
-                            {item.done ? "☑" : "☐"}
-                          </span>
-                          <span className="flex-1 text-stone-700">
-                            {item.text}
-                            {links.length > 0 && (
-                              <span className="ml-2 inline-flex flex-wrap gap-1">
-                                {links.map((l) => (
-                                  <Link
-                                    key={l.id}
-                                    href={`/grammar/${l.id}`}
-                                    className="rounded-full border border-stone-300 px-2 py-0.5 text-xs font-medium text-stone-600 hover:border-stone-500 hover:text-stone-900"
-                                  >
-                                    Practice →
-                                  </Link>
-                                ))}
-                              </span>
-                            )}
-                          </span>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                  <SyllabusChecklist items={items} initialChecked={initialChecked} loggedIn={Boolean(session)} />
                 </div>
 
                 <div className="flex flex-col gap-6">

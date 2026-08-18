@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { speak } from "@/app/components/SpeakButton";
+import { speak, useHasBulgarianVoice } from "@/app/components/SpeakButton";
 
 type Props = {
   bg: string;
@@ -32,6 +32,7 @@ function seededShuffle<T extends string>(items: T[], seed: string): T[] {
 // word on screen from the start.
 export function ListeningExercise({ bg, en, distractors, onAnswer }: Props) {
   const [selected, setSelected] = useState<string | null>(null);
+  const hasBulgarianVoice = useHasBulgarianVoice();
 
   const options = useMemo(() => {
     const wrongOptions = seededShuffle(
@@ -58,7 +59,14 @@ export function ListeningExercise({ bg, en, distractors, onAnswer }: Props) {
         type="button"
         onClick={handlePlay}
         aria-label="Play audio"
-        className="flex h-16 w-16 items-center justify-center rounded-full bg-stone-900 text-white hover:bg-stone-700"
+        title={
+          hasBulgarianVoice === false
+            ? "No Bulgarian voice is installed on this device -- this will likely be silent. On Windows: Settings → Time & Language → Language & region → Add a language → Bulgarian."
+            : undefined
+        }
+        className={`flex h-16 w-16 items-center justify-center rounded-full text-white ${
+          hasBulgarianVoice === false ? "bg-amber-500 hover:bg-amber-600" : "bg-stone-900 hover:bg-stone-700"
+        }`}
       >
         <svg viewBox="0 0 24 24" fill="none" className="h-7 w-7">
           <path d="M11 5 6 9H2v6h4l5 4V5z" fill="currentColor" />
@@ -70,6 +78,11 @@ export function ListeningExercise({ bg, en, distractors, onAnswer }: Props) {
           />
         </svg>
       </button>
+      {hasBulgarianVoice === false && (
+        <p className="max-w-xs text-xs text-amber-600">
+          No Bulgarian voice found on this device -- playback will likely be silent.
+        </p>
+      )}
       <div className="grid w-full grid-cols-1 gap-2">
         {options.map((option) => {
           const isCorrect = option === en;
